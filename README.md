@@ -78,6 +78,8 @@ Cloudinary cần `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_
 Ảnh được upload bằng SDK, lưu riêng URL và public ID; sửa ảnh mới sẽ xóa ảnh cũ, xóa sản phẩm sẽ xóa ảnh trên cloud.
 Cloudinary thật đã được kiểm tra riêng qua service: upload, truy cập ảnh HTTPS, thay ảnh và xóa ảnh đều thành công. Xem phạm vi xác minh trong `docs/KET_QUA_KIEM_THU.md`; cấu hình riêng lưu trong `.env` local.
 
+Trên máy hiện tại, `.env` local đã được cấu hình và cả ba ví dụ đã được kiểm thử với SQL Server thật. Ví dụ 3 đã kiểm thử thêm SMTP gửi OTP và CRUD sản phẩm kết hợp Cloudinary. Có thể nhấp đúp `Chay_VD1_SQLServer.cmd`, `Chay_VD2_SQLServer.cmd`, `Chay_VD3_SQLServer.cmd` để chạy với dịch vụ thật. Khi clone sang máy khác, cần tự điền `.env` theo hướng dẫn trên.
+
 ## Kiểm tra OTP trong chế độ demo
 
 Ví dụ 3 lưu thư tại **`vd3-shop-otp/data/mailbox/<email>.txt`** khi chạy bằng `scripts/run.ps1`.
@@ -122,5 +124,6 @@ Xem kết quả từng test trong `*/target/surefire-reports/` và báo cáo `do
 - Tải quan hệ cần thiết trong transaction, tắt Open Session in View; tránh lỗi lazy loading khi đưa dữ liệu ra view.
 - DTO không chứa mật khẩu đã băm; ID, mật khẩu và thời gian tạo không được ghi đè từ form user.
 - Không sao chép mật khẩu SMTP hay API secret minh họa trong PDF vào bài làm.
+- Tìm sản phẩm bằng HQL `ilike` để hỗ trợ mô tả Unicode dài trên SQL Server (`nvarchar(max)`); kiểm tra tìm kiếm ở cuối mô tả hơn 4.000 ký tự và khi mô tả trống.
 
-Nguồn API đối chiếu: [Spring Boot 4.1.1](https://docs.spring.io/spring-boot/system-requirements.html), [Spring Security DaoAuthenticationProvider](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html), [Cloudinary Java upload](https://cloudinary.com/documentation/java_image_and_video_upload).
+Nguồn API đối chiếu: [Spring Boot 4.1.1](https://docs.spring.io/spring-boot/system-requirements.html), [Spring Security DaoAuthenticationProvider](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html), [Cloudinary Java upload](https://cloudinary.com/documentation/java_image_and_video_upload), [Hibernate HQL](https://docs.hibernate.org/stable/orm/querylanguage/html_single/).

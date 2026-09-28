@@ -11,13 +11,14 @@ import vn.iotstar.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    // Tìm theo tên/mô tả; owner = null nghĩa là lấy sản phẩm của mọi user (admin)
+    // ilike giữ tìm kiếm không phân biệt hoa/thường cả với nvarchar(max) trên SQL Server.
+    // owner = null nghĩa là lấy sản phẩm của mọi user (admin).
     @EntityGraph(attributePaths = "user")
     @Query("""
             select p from Product p
             where (:owner is null or p.user.id = :owner)
-              and (lower(p.name) like lower(concat('%', :keyword, '%'))
-                   or lower(coalesce(p.description, '')) like lower(concat('%', :keyword, '%')))
+              and (p.name ilike concat('%', :keyword, '%')
+                   or p.description ilike concat('%', :keyword, '%'))
             """)
     Page<Product> search(@Param("keyword") String keyword, @Param("owner") Long owner, Pageable pageable);
 

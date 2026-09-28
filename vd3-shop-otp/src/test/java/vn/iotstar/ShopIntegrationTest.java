@@ -95,6 +95,24 @@ class ShopIntegrationTest {
         return new MockMultipartFile("image", "pixel.png", "image/png", Base64.getDecoder().decode(PIXEL_PNG));
     }
 
+    @Test
+    @WithUserDetails("admin")
+    void productSearchIncludesTheEndOfLongUnicodeDescriptions() {
+        var dto = newProduct();
+        dto.setDescription("á".repeat(4500) + " Điện THOẠI cuối mô tả");
+        var created = productService.create(dto, null);
+        try {
+            assertThat(productService.findAll("điện thoại cuối", 0, 10).getContent())
+                    .extracting(ProductDTO::getId).contains(created.getId());
+            dto.setDescription(null);
+            productService.update(created.getId(), dto, null);
+            assertThat(productService.findAll(dto.getName(), 0, 10).getContent())
+                    .extracting(ProductDTO::getId).contains(created.getId());
+        } finally {
+            productService.delete(created.getId());
+        }
+    }
+
     // Đọc OTP từ hộp thư demo data/mailbox/<email>.txt
     private String otpSentTo(String email) throws Exception {
         String mail = Files.readString(Path.of("data", "mailbox", email + ".txt"));
