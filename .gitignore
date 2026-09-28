@@ -8,6 +8,7 @@
 .idea/
 *.iml
 .classpath
+.factorypath
 .project
 .settings/
 *.log
