@@ -14,3 +14,7 @@
 *.log
 
 .runtime/
+
+# Tài liệu minh chứng và shortcut chỉ dùng tại máy local.
+/docs/
+/Chay_VD*_*.cmd
