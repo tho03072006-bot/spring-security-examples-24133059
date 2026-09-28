@@ -1,3 +1,5 @@
 package vn.iotstar.service;
 
-public record CloudinaryUploadResult(String url,String publicId) {}
+// URL để hiển thị ảnh, publicId để xóa ảnh sau này
+public record CloudinaryUploadResult(String url, String publicId) {
+}

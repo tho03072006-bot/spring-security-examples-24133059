@@ -1,1 +1,15 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{layouts/layout :: head('Có lỗi xảy ra')}"></head><body><div th:replace="~{layouts/layout :: page(~{::section})}"><section><div class="panel"><h1>Có lỗi xảy ra</h1><p th:text="${message}">Vui lòng kiểm tra yêu cầu và thử lại.</p><a class="button" th:href="@{/}">Về trang chủ</a></div></section></div></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/layout :: head('Có lỗi xảy ra')}"></head>
+<body>
+<div th:replace="~{layouts/layout :: page(~{::section})}">
+    <section>
+        <div class="panel">
+            <h1>Có lỗi xảy ra</h1>
+            <p th:text="${message}">Vui lòng kiểm tra yêu cầu và thử lại.</p>
+            <a class="button" th:href="@{/}">Về trang chủ</a>
+        </div>
+    </section>
+</div>
+</body>
+</html>

@@ -1,5 +1,19 @@
 package vn.iotstar.service;
 
+import vn.iotstar.dto.RegisterDTO;
+import vn.iotstar.dto.ResetPasswordDTO;
+
 public interface AuthService {
-void register(vn.iotstar.dto.RegisterDTO dto); boolean verifyRegister(String email,String otp); void resendRegisterOtp(String email); void forgotPassword(String email); boolean resetPassword(vn.iotstar.dto.ResetPasswordDTO dto);
+
+    // Tạo tài khoản chưa kích hoạt và gửi OTP đăng ký
+    void register(RegisterDTO dto);
+
+    boolean verifyRegister(String email, String otp);
+
+    void resendRegisterOtp(String email);
+
+    // Gửi OTP đặt lại mật khẩu
+    void forgotPassword(String email);
+
+    boolean resetPassword(ResetPasswordDTO dto);
 }

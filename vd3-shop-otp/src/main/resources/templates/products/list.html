@@ -1,1 +1,82 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{layouts/layout :: head('Quản lý sản phẩm')}"></head><body><div th:replace="~{layouts/layout :: page(~{::section})}"><section><h1>Quản lý sản phẩm</h1><p class="note" th:unless="${admin}">Danh sách sản phẩm thuộc tài khoản của bạn.</p><div class="toolbar"><form th:action="@{/products}" method="get"><input name="keyword" th:value="${keyword}" placeholder="Tên sản phẩm, mô tả..."><label for="size">Số dòng</label><select id="size" name="size"><option th:each="n:${ {5,10,20,50} }" th:value="${n}" th:text="${n}" th:selected="${n == size}"></option></select><button>Tìm kiếm</button><a th:href="@{/products}">Xóa lọc</a></form><a class="button" th:href="@{/products/create}">+ Thêm mới</a></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Ảnh</th><th>Tên sản phẩm</th><th>Giá</th><th>Người sở hữu</th><th>Thao tác</th></tr></thead><tbody><tr th:each="p:${products.content}"><td th:text="${p.id}"></td><td><img class="thumb" th:if="${p.imageUrl != null}" th:src="${p.imageUrl}" th:alt="${p.name}"><span th:unless="${p.imageUrl != null}">Chưa có ảnh</span></td><td th:text="${p.name}"></td><td th:text="${#numbers.formatDecimal(p.price,0,'COMMA',2,'POINT')}"></td><td th:text="${p.username}"></td><td><div class="actions"><a th:href="@{/products/edit/{id}(id=${p.id})}">Sửa</a><form th:action="@{/products/delete/{id}(id=${p.id})}" method="post" onsubmit="return confirm('Xóa sản phẩm này?')"><button class="danger-link">Xóa</button></form></div></td></tr><tr th:if="${products.empty}"><td colspan="6">Không có dữ liệu.</td></tr></tbody></table></div><div class="pagination"><a th:if="${products.hasPrevious()}" th:href="@{/products(page=${products.number-1},size=${size},keyword=${keyword})}">Trước</a><th:block th:if="${products.totalPages > 0}"><a th:each="i:${#numbers.sequence(0,products.totalPages-1)}" th:href="@{/products(page=${i},size=${size},keyword=${keyword})}" th:classappend="${i == products.number ? 'active' : ''}" th:text="${i+1}"></a></th:block><a th:if="${products.hasNext()}" th:href="@{/products(page=${products.number+1},size=${size},keyword=${keyword})}">Sau</a></div><p class="note" th:text="${'Tổng: ' + products.totalElements + ' bản ghi'}"></p></section></div></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layouts/layout :: head('Quản lý sản phẩm')}"></head>
+<body>
+<div th:replace="~{layouts/layout :: page(~{::section})}">
+    <section>
+        <h1>Quản lý sản phẩm</h1>
+        <p class="note" sec:authorize="!hasRole('ADMIN')">Danh sách sản phẩm thuộc tài khoản của bạn.</p>
+
+        <!-- Tìm kiếm + chọn số dòng mỗi trang -->
+        <div class="toolbar">
+            <form th:action="@{/products}" method="get">
+                <input name="keyword" th:value="${keyword}" placeholder="Tên sản phẩm, mô tả...">
+                <label for="size">Số dòng</label>
+                <select id="size" name="size">
+                    <option th:each="n : ${ {5, 10, 20, 50} }" th:value="${n}" th:text="${n}"
+                            th:selected="${n == size}"></option>
+                </select>
+                <button type="submit">Tìm kiếm</button>
+                <a th:href="@{/products}">Xóa lọc</a>
+            </form>
+            <a class="button" th:href="@{/products/create}">+ Thêm mới</a>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Người sở hữu</th>
+                    <th>Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products.content}">
+                    <td th:text="${p.id}"></td>
+                    <td>
+                        <img class="thumb" th:if="${p.imageUrl != null}" th:src="@{${p.imageUrl}}" th:alt="${p.name}">
+                        <span th:unless="${p.imageUrl != null}">Chưa có ảnh</span>
+                    </td>
+                    <td th:text="${p.name}"></td>
+                    <td th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                    <td th:text="${p.username}"></td>
+                    <td>
+                        <div class="actions">
+                            <a th:href="@{/products/edit/{id}(id=${p.id})}">Sửa</a>
+                            <form th:action="@{/products/delete/{id}(id=${p.id})}" method="post"
+                                  onsubmit="return confirm('Xóa sản phẩm này?')">
+                                <button class="danger-link" type="submit">Xóa</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${products.empty}">
+                    <td colspan="6">Không có dữ liệu.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Phân trang, giữ nguyên từ khóa và số dòng -->
+        <div class="pagination">
+            <a th:if="${products.hasPrevious()}"
+               th:href="@{/products(page=${products.number - 1}, size=${size}, keyword=${keyword})}">Trước</a>
+            <th:block th:if="${products.totalPages > 0}">
+                <a th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}"
+                   th:href="@{/products(page=${i}, size=${size}, keyword=${keyword})}"
+                   th:classappend="${i == products.number} ? 'active'"
+                   th:text="${i + 1}"></a>
+            </th:block>
+            <a th:if="${products.hasNext()}"
+               th:href="@{/products(page=${products.number + 1}, size=${size}, keyword=${keyword})}">Sau</a>
+        </div>
+        <p class="note" th:text="|Tổng: ${products.totalElements} bản ghi|"></p>
+    </section>
+</div>
+</body>
+</html>

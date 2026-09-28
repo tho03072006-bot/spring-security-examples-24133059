@@ -9,7 +9,7 @@ Repository: [spring-security-examples-24133059](https://github.com/tho03072006-b
 
 - JDK **26**.
 - Maven **3.9.16** (hoặc Maven >= 3.6.3).
-- Spring Boot **4.1.1**, Spring Security **7.1.x**, MapStruct **1.6.3**.
+- Spring Boot **4.1.1**, Spring Security **7.1.x**, MapStruct **1.6.3**, Thymeleaf Extras Spring Security 6.
 - SQL Server cho chế độ `sqlserver`; SMTP và Cloudinary cho ví dụ 3.
 - Chế độ `demo` dùng H2 lưu file, thư OTP lưu tại máy và ảnh lưu tại máy để có thể chạy thử khi chưa có tài khoản dịch vụ. Chế độ này được ghi rõ, không thay thế cấu hình SQL Server/SMTP/Cloudinary của bài.
 
@@ -23,6 +23,7 @@ Repository: [spring-security-examples-24133059](https://github.com/tho03072006-b
 
 Các lớp chính nằm trong `vn.iotstar`: `entity`, `dto`, `mapper`, `repository`, `security`, `config`, `controller`, `service`, `service.impl`.
 Ví dụ 3 có interface service và lớp triển khai riêng. MapStruct sinh mapper khi Maven compile, không chuyển DTO thủ công thay cho mapper.
+Header đọc thông tin user từ principal `CustomUserDetails` bằng `sec:authorize` và `${#authentication.principal}` như trong PDF.
 
 ## Build và chạy nhanh trên Windows
 

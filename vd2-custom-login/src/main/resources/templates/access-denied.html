@@ -1,1 +1,17 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}"><head><title>Không có quyền</title></head><body><main layout:fragment="content"><div class="panel"><h1>Không có quyền truy cập</h1><p>Chức năng này yêu cầu quyền quản trị viên.</p><a class="button" th:href="@{/}">Về trang chủ</a></div></main></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Không có quyền</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="panel">
+        <h1>Không có quyền truy cập</h1>
+        <p>Chức năng này yêu cầu quyền quản trị viên.</p>
+        <a class="button" th:href="@{/}">Về trang chủ</a>
+    </div>
+</main>
+</body>
+</html>

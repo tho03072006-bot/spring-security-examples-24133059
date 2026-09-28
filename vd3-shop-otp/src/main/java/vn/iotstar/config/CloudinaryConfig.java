@@ -1,12 +1,25 @@
 package vn.iotstar.config;
 
-import java.util.Map;
 import com.cloudinary.Cloudinary;
-import org.springframework.context.annotation.*;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
-@Configuration @Profile("!demo & !test")
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Chỉ tạo client Cloudinary thật khi không chạy demo/test
+@Configuration
+@Profile("!demo & !test")
 public class CloudinaryConfig {
-    @Bean Cloudinary cloudinary(@Value("${cloudinary.cloud-name}") String name,@Value("${cloudinary.api-key}") String key,@Value("${cloudinary.api-secret}") String secret){
-        return new Cloudinary(Map.of("cloud_name",name,"api_key",key,"api_secret",secret,"secure",true));
+
+    @Bean
+    Cloudinary cloudinary(@Value("${cloudinary.cloud-name}") String cloudName,
+                          @Value("${cloudinary.api-key}") String apiKey,
+                          @Value("${cloudinary.api-secret}") String apiSecret) {
+        return new Cloudinary(Map.of(
+                "cloud_name", cloudName,
+                "api_key", apiKey,
+                "api_secret", apiSecret,
+                "secure", true));
     }
 }

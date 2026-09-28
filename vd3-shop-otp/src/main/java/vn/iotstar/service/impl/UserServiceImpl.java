@@ -2,56 +2,147 @@ package vn.iotstar.service.impl;
 
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.data.domain.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.iotstar.dto.UserDTO;
 import vn.iotstar.entity.User;
-import vn.iotstar.repository.*;
 import vn.iotstar.mapper.UserMapper;
-import vn.iotstar.service.*;
-@Service @RequiredArgsConstructor
+import vn.iotstar.repository.OtpTokenRepository;
+import vn.iotstar.repository.ProductRepository;
+import vn.iotstar.repository.RoleRepository;
+import vn.iotstar.repository.UserRepository;
+import vn.iotstar.service.CloudinaryService;
+import vn.iotstar.service.UserService;
+
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository users;
-    private final RoleRepository roles;
-    private final ProductRepository products;
-    private final OtpTokenRepository tokens;
-    private final CloudinaryService images;
-    private final UserMapper mapper;
-    private final PasswordEncoder encoder;
-    private final CurrentAccount account;
-    private User require(Long id){return users.findById(id).orElseThrow(()->new IllegalArgumentException("User không tồn tại."));}
-    private UserDTO dto(User user){var dto=mapper.toDTO(user);dto.setProductCount(products.countByUserId(user.getId()));return dto;}
-    @PreAuthorize("hasRole('ADMIN')") @Transactional(readOnly=true)
-    public Page<UserDTO> findAll(String keyword,int page,int size){
-        return users.search(keyword==null?"":keyword.trim(),PageRequest.of(Math.max(0,page),Math.max(1,Math.min(100,size)),Sort.by(Sort.Direction.DESC,"id"))).map(this::dto);
+
+    private static final String ADMIN = "ROLE_ADMIN";
+    private static final String DEFAULT_PASSWORD = "123456";
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final ProductRepository productRepository;
+    private final OtpTokenRepository otpTokenRepository;
+    private final CloudinaryService imageService;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final CurrentAccount currentAccount;
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional(readOnly = true)
+    public Page<UserDTO> findAll(String keyword, int page, int size) {
+        String text = keyword == null ? "" : keyword.trim();
+        var pageable = PageRequest.of(Math.max(0, page), Math.clamp(size, 1, 100), Sort.by(Sort.Direction.DESC, "id"));
+        return userRepository.search(text, pageable).map(this::toDTO);
     }
-    @PreAuthorize("hasRole('ADMIN')") @Transactional(readOnly=true) public UserDTO findById(Long id){return dto(require(id));}
-    private void validate(UserDTO dto,Long id){
-        dto.setUsername(dto.getUsername().trim().toLowerCase(Locale.ROOT));dto.setEmail(dto.getEmail().trim().toLowerCase(Locale.ROOT));dto.setFullName(dto.getFullName().trim());
-        users.findByUsernameIgnoreCase(dto.getUsername()).filter(u->!u.getId().equals(id)).ifPresent(u->{throw new IllegalArgumentException("Username đã tồn tại.");});
-        users.findByEmailIgnoreCase(dto.getEmail()).filter(u->!u.getId().equals(id)).ifPresent(u->{throw new IllegalArgumentException("Email đã tồn tại.");});
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional(readOnly = true)
+    public UserDTO findById(Long id) {
+        return toDTO(requireUser(id));
     }
-    @PreAuthorize("hasRole('ADMIN')") @Transactional public UserDTO create(UserDTO dto){
-        validate(dto,null);var user=mapper.toEntity(dto);user.setRole(roles.findByName(dto.getRoleName()).orElseThrow(()->new IllegalArgumentException("Vai trò không hợp lệ")));
-        user.setPassword(encoder.encode("123456"));user.setImages("/images/avatar.svg");return dto(users.save(user));
+
+    // User do admin tạo dùng mật khẩu mặc định 123456
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public UserDTO create(UserDTO dto) {
+        normalizeAndCheckUnique(dto, null);
+        User user = userMapper.toEntity(dto);
+        user.setRole(roleRepository.findByName(dto.getRoleName())
+                .orElseThrow(() -> new IllegalArgumentException("Vai trò không hợp lệ")));
+        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        user.setImages("/images/avatar.svg");
+        return toDTO(userRepository.save(user));
     }
-    @PreAuthorize("hasRole('ADMIN')") @Transactional public UserDTO update(Long id,UserDTO dto){
-        var user=require(id);validate(dto,id);
-        boolean removesAdmin=user.isEnabled() && user.getRole().getName().equals("ROLE_ADMIN") && (!dto.isEnabled() || !dto.getRoleName().equals("ROLE_ADMIN"));
-        if(removesAdmin && users.countByRoleNameAndEnabledTrue("ROLE_ADMIN")<=1)throw new IllegalArgumentException("Phải giữ ít nhất một quản trị viên đang hoạt động.");
-        if(id.equals(account.get().getId()) && (!dto.isEnabled() || !dto.getRoleName().equals("ROLE_ADMIN")))throw new IllegalArgumentException("Không thể tự khóa hoặc hạ quyền tài khoản đang đăng nhập.");
-        mapper.update(dto,user);user.setRole(roles.findByName(dto.getRoleName()).orElseThrow());return dto(user);
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public UserDTO update(Long id, UserDTO dto) {
+        User user = requireUser(id);
+        normalizeAndCheckUnique(dto, id);
+
+        boolean keepsAdmin = dto.isEnabled() && ADMIN.equals(dto.getRoleName());
+        boolean isActiveAdmin = user.isEnabled() && ADMIN.equals(user.getRole().getName());
+        if (isActiveAdmin && !keepsAdmin && userRepository.countByRoleNameAndEnabledTrue(ADMIN) <= 1) {
+            throw new IllegalArgumentException("Phải giữ ít nhất một quản trị viên đang hoạt động.");
+        }
+        if (id.equals(currentAccount.get().getId()) && !keepsAdmin) {
+            throw new IllegalArgumentException("Không thể tự khóa hoặc hạ quyền tài khoản đang đăng nhập.");
+        }
+
+        userMapper.update(dto, user);
+        user.setRole(roleRepository.findByName(dto.getRoleName()).orElseThrow());
+        return toDTO(user);
     }
-    @PreAuthorize("hasRole('ADMIN')") @Transactional public void delete(Long id){
-        var user=require(id);
-        if(id.equals(account.get().getId()))throw new IllegalArgumentException("Không thể xóa tài khoản đang đăng nhập.");
-        if(user.isEnabled() && user.getRole().getName().equals("ROLE_ADMIN") && users.countByRoleNameAndEnabledTrue("ROLE_ADMIN")<=1)throw new IllegalArgumentException("Không thể xóa quản trị viên cuối cùng.");
-        for(var product:products.findByUserId(id))images.delete(product.getImagePublicId());
-        tokens.deleteByEmail(user.getEmail());users.delete(user);
+
+    // Xóa user kéo theo sản phẩm (cascade), ảnh sản phẩm và OTP của user
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void delete(Long id) {
+        User user = requireUser(id);
+        if (id.equals(currentAccount.get().getId())) {
+            throw new IllegalArgumentException("Không thể xóa tài khoản đang đăng nhập.");
+        }
+        boolean isActiveAdmin = user.isEnabled() && ADMIN.equals(user.getRole().getName());
+        if (isActiveAdmin && userRepository.countByRoleNameAndEnabledTrue(ADMIN) <= 1) {
+            throw new IllegalArgumentException("Không thể xóa quản trị viên cuối cùng.");
+        }
+        for (var product : productRepository.findByUserId(id)) {
+            imageService.delete(product.getImagePublicId());
+        }
+        otpTokenRepository.deleteByEmail(user.getEmail());
+        userRepository.delete(user);
     }
-    @Transactional(readOnly=true) public long countUsers(){return users.count();}
-    @Transactional(readOnly=true) public long countProducts(Long id){return products.countByUserId(id);}
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countUsers() {
+        return userRepository.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countProducts(Long userId) {
+        return productRepository.countByUserId(userId);
+    }
+
+    private User requireUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User không tồn tại."));
+    }
+
+    private UserDTO toDTO(User user) {
+        UserDTO dto = userMapper.toDTO(user);
+        dto.setProductCount(productRepository.countByUserId(user.getId()));
+        return dto;
+    }
+
+    // Chuẩn hóa chữ thường, bỏ khoảng trắng; username/email không được trùng user khác
+    private void normalizeAndCheckUnique(UserDTO dto, Long currentId) {
+        dto.setUsername(dto.getUsername().trim().toLowerCase(Locale.ROOT));
+        dto.setEmail(dto.getEmail().trim().toLowerCase(Locale.ROOT));
+        dto.setFullName(dto.getFullName().trim());
+        userRepository.findByUsernameIgnoreCase(dto.getUsername())
+                .filter(other -> !other.getId().equals(currentId))
+                .ifPresent(other -> {
+                    throw new IllegalArgumentException("Username đã tồn tại.");
+                });
+        userRepository.findByEmailIgnoreCase(dto.getEmail())
+                .filter(other -> !other.getId().equals(currentId))
+                .ifPresent(other -> {
+                    throw new IllegalArgumentException("Email đã tồn tại.");
+                });
+    }
 }

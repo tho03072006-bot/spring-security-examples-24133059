@@ -1,18 +1,27 @@
 package vn.iotstar.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.userdetails.*;
-import vn.iotstar.repository.UserRepository;
 import vn.iotstar.mapper.UserMapper;
-@Service @RequiredArgsConstructor
+import vn.iotstar.repository.UserRepository;
+
+// Ví dụ 3: đăng nhập bằng username
+@Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserRepository users;
-    private final UserMapper mapper;
-    @Override @Transactional(readOnly=true)
-    public UserDetails loadUserByUsername(String login) {
-        var u=users.findByUsernameIgnoreCase(login.trim()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy tài khoản"));
-        return new CustomUserDetails(mapper.toDTO(u),u.getPassword());
+
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) {
+        var user = userRepository.findByUsernameIgnoreCase(username.trim())
+                .orElseThrow(() -> new UsernameNotFoundException("Username không tồn tại"));
+        return new CustomUserDetails(userMapper.toDTO(user), user.getPassword());
     }
 }

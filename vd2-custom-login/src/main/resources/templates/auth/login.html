@@ -1,1 +1,31 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}"><head><title>Đăng nhập</title></head><body><main layout:fragment="content"><div class="auth-card"><p class="eyebrow">VÍ DỤ 2 / SPRING SECURITY</p><h1>Đăng nhập</h1><div class="alert error" th:if="${param.error}">Thông tin đăng nhập không đúng hoặc tài khoản chưa được kích hoạt.</div><div class="alert success" th:if="${param.logout}">Đã đăng xuất thành công.</div><div class="alert error" th:if="${param.expired}">Phiên đăng nhập đã hết hạn.</div><div th:if="${success}" class="alert success" th:text="${success}"></div><form th:action="@{/login}" method="post"><label for="login">Username hoặc email</label><input id="login" name="login" required autofocus autocomplete="username" type="text"><label for="password">Mật khẩu</label><input id="password" type="password" name="password" autocomplete="current-password" required><button class="full">Đăng nhập</button></form><p class="note">Tài khoản mẫu: admin / 123456</p></div></main></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Đăng nhập</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="auth-card">
+        <p class="eyebrow">VÍ DỤ 2 / SPRING SECURITY</p>
+        <h1>Đăng nhập</h1>
+        <div class="alert error" th:if="${param.error}">
+            Username/email hoặc mật khẩu không đúng, hoặc tài khoản chưa được kích hoạt.
+        </div>
+        <div class="alert success" th:if="${param.logout}">Đã đăng xuất thành công.</div>
+        <div class="alert error" th:if="${param.expired}">Phiên đăng nhập đã hết hạn.</div>
+
+        <!-- th:action tự chèn CSRF token vào form -->
+        <form th:action="@{/login}" method="post">
+            <label for="login">Username hoặc email</label>
+            <input id="login" type="text" name="login" autocomplete="username" required autofocus>
+            <label for="password">Mật khẩu</label>
+            <input id="password" type="password" name="password" autocomplete="current-password" required>
+            <button class="full" type="submit">Đăng nhập</button>
+        </form>
+        <p class="note">Tài khoản mẫu: admin / 123456</p>
+    </div>
+</main>
+</body>
+</html>

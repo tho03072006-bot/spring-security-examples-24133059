@@ -1,1 +1,48 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{layouts/layout :: head('Thông tin người dùng')}"></head><body><div th:replace="~{layouts/layout :: page(~{::section})}"><section><div class="panel form-panel"><h1 th:text="${mode == 'create' ? 'Thêm người dùng' : 'Sửa người dùng'}"></h1><form th:object="${userDTO}" th:action="${mode == 'create'} ? @{/users/create} : @{/users/edit/{id}(id=${userDTO.id})}" method="post"><div class="alert error" th:if="${#fields.hasGlobalErrors()}"><p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p></div><label for="username">Username</label><input id="username" type="text" th:field="*{username}" ><small class="error-text" th:errors="*{username}"></small><label for="email">Email</label><input id="email" type="email" th:field="*{email}" ><small class="error-text" th:errors="*{email}"></small><label for="fullName">Họ tên</label><input id="fullName" type="text" th:field="*{fullName}" ><small class="error-text" th:errors="*{fullName}"></small><label for="roleName">Vai trò</label><select id="roleName" th:field="*{roleName}"><option value="ROLE_USER">USER</option><option value="ROLE_ADMIN">ADMIN</option></select><small class="error-text" th:errors="*{roleName}"></small><label><input type="checkbox" th:field="*{enabled}"> Kích hoạt tài khoản</label><p><button>Lưu</button> <a class="button secondary" th:href="@{/users}">Hủy</a></p></form><p class="note" th:if="${mode == 'create'}">Mật khẩu mặc định: <b>123456</b>.</p></div></section></div></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/layout :: head('Thông tin người dùng')}"></head>
+<body>
+<div th:replace="~{layouts/layout :: page(~{::section})}">
+    <section>
+        <div class="panel form-panel">
+            <h1 th:text="${mode == 'create'} ? 'Thêm người dùng' : 'Sửa người dùng'">Người dùng</h1>
+
+            <!-- Dùng chung cho thêm và sửa -->
+            <form th:object="${userDTO}" method="post"
+                  th:action="${mode == 'create'} ? @{/users/create} : @{/users/edit/{id}(id=${userDTO.id})}">
+                <div class="alert error" th:if="${#fields.hasGlobalErrors()}">
+                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+                </div>
+
+                <label for="username">Username</label>
+                <input id="username" type="text" th:field="*{username}">
+                <small class="error-text" th:errors="*{username}"></small>
+
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}">
+                <small class="error-text" th:errors="*{email}"></small>
+
+                <label for="fullName">Họ tên</label>
+                <input id="fullName" type="text" th:field="*{fullName}">
+                <small class="error-text" th:errors="*{fullName}"></small>
+
+                <label for="roleName">Vai trò</label>
+                <select id="roleName" th:field="*{roleName}">
+                    <option value="ROLE_USER">USER</option>
+                    <option value="ROLE_ADMIN">ADMIN</option>
+                </select>
+                <small class="error-text" th:errors="*{roleName}"></small>
+
+                <label><input type="checkbox" th:field="*{enabled}"> Kích hoạt tài khoản</label>
+
+                <p>
+                    <button type="submit">Lưu</button>
+                    <a class="button secondary" th:href="@{/users}">Hủy</a>
+                </p>
+            </form>
+            <p class="note" th:if="${mode == 'create'}">Mật khẩu mặc định: <b>123456</b>.</p>
+        </div>
+    </section>
+</div>
+</body>
+</html>

@@ -1,9 +1,22 @@
 package vn.iotstar.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
+import vn.iotstar.dto.ProductDTO;
+
 public interface ProductService {
-org.springframework.data.domain.Page<vn.iotstar.dto.ProductDTO> findAll(String keyword,int page,int size);
-vn.iotstar.dto.ProductDTO findById(Long id);
-vn.iotstar.dto.ProductDTO create(vn.iotstar.dto.ProductDTO dto,org.springframework.web.multipart.MultipartFile image);
-vn.iotstar.dto.ProductDTO update(Long id,vn.iotstar.dto.ProductDTO dto,org.springframework.web.multipart.MultipartFile image);
-void delete(Long id); long countProducts(); long countByUser(Long userId);
+
+    Page<ProductDTO> findAll(String keyword, int page, int size);
+
+    ProductDTO findById(Long id);
+
+    ProductDTO create(ProductDTO dto, MultipartFile image);
+
+    ProductDTO update(Long id, ProductDTO dto, MultipartFile image);
+
+    void delete(Long id);
+
+    long countProducts();
+
+    long countByUser(Long userId);
 }

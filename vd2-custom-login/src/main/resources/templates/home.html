@@ -1,1 +1,25 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}"><head><title>Trang chủ</title></head><body><main layout:fragment="content"><p class="eyebrow">VÍ DỤ 2</p><h1>Trang chủ IOTSTAR SHOP</h1><div class="panel"><p th:if="${signedIn}">Xin chào <strong th:text="${currentUser.fullName}"></strong>. Thông tin tài khoản của bạn được hiển thị trên header.</p><p th:unless="${signedIn}">Đăng nhập để xem thông tin tài khoản.</p><p>Đăng nhập bằng username hoặc email; layout sử dụng Thymeleaf Layout Dialect.</p><a class="button" th:unless="${signedIn}" th:href="@{/login}">Đăng nhập</a><a class="button" th:if="${admin}" th:href="@{/admin}">Trang quản trị</a></div></main></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Trang chủ</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <p class="eyebrow">VÍ DỤ 2</p>
+    <h1>Trang chủ IOTSTAR SHOP</h1>
+    <div class="panel">
+        <p sec:authorize="isAuthenticated()">
+            Xin chào <strong th:text="${#authentication.principal.fullName}">User</strong>.
+            Thông tin tài khoản của bạn được hiển thị trên header.
+        </p>
+        <p sec:authorize="!isAuthenticated()">Đăng nhập để xem thông tin tài khoản.</p>
+        <p>Đăng nhập bằng username hoặc email; layout sử dụng Thymeleaf Layout Dialect.</p>
+        <a class="button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Đăng nhập</a>
+        <a class="button" sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Trang quản trị</a>
+    </div>
+</main>
+</body>
+</html>

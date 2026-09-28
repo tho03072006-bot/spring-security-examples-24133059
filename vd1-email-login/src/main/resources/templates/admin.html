@@ -1,1 +1,14 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{layouts/layout :: head('Quản trị')}"></head><body><div th:replace="~{layouts/layout :: page(~{::section})}"><section><div class="panel"><h1>Trang quản trị</h1><p>Bạn đã đăng nhập với vai trò ROLE_ADMIN.</p></div></section></div></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/layout :: head('Quản trị')}"></head>
+<body>
+<div th:replace="~{layouts/layout :: page(~{::section})}">
+    <section>
+        <div class="panel">
+            <h1>Trang quản trị</h1>
+            <p>Bạn đã đăng nhập với vai trò ROLE_ADMIN.</p>
+        </div>
+    </section>
+</div>
+</body>
+</html>

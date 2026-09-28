@@ -1,1 +1,22 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:fragment="head(title)"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title th:text="${title + ' | IOTSTAR SHOP'}"></title><link rel="stylesheet" th:href="@{/css/app.css}"></head><body><div th:fragment="page(content)"><header th:replace="~{fragments/header :: header}"></header><main><div class="alert success" th:if="${success}" th:text="${success}"></div><div class="alert error" th:if="${error}" th:text="${error}"></div><th:block th:replace="${content}"></th:block></main><footer th:replace="~{fragments/footer :: footer}"></footer></div></body></html>
+<!DOCTYPE html>
+<!-- Ví dụ 1: layout ghép bằng fragment, không dùng Layout Dialect -->
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title + ' | IOTSTAR SHOP'}">IOTSTAR SHOP</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<!-- Trang con truyền nội dung vào qua tham số content -->
+<div th:fragment="page(content)">
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main>
+        <div class="alert success" th:if="${success}" th:text="${success}"></div>
+        <div class="alert error" th:if="${error}" th:text="${error}"></div>
+        <th:block th:replace="${content}"></th:block>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+</body>
+</html>
