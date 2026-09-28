@@ -18,16 +18,16 @@ public class UserDTO {
 
     @NotBlank(message = "Email không được để trống")
     @Email(message = "Email không hợp lệ")
-    @Size(max = 150)
+    @Size(max = 150, message = "Email không được vượt quá 150 ký tự")
     private String email;
 
     @NotBlank(message = "Họ tên không được để trống")
-    @Size(max = 150)
+    @Size(max = 150, message = "Họ tên không được vượt quá 150 ký tự")
     private String fullName;
 
     private String images;
 
-    @NotBlank
+    @NotBlank(message = "Vui lòng chọn vai trò")
     @Pattern(regexp = "ROLE_(USER|ADMIN)", message = "Vai trò không hợp lệ")
     private String roleName;
 

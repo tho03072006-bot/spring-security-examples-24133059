@@ -1,36 +1,223 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{layouts/layout :: head('Dashboard')}"></head>
-<body>
-<div th:replace="~{layouts/layout :: page(~{::section})}">
-    <section>
-        <p class="eyebrow">VÍ DỤ 3 / QUẢN LÝ SHOP</p>
-        <h1>Dashboard</h1>
-        <p>Đăng ký và xác thực email, quản lý người dùng và sản phẩm.</p>
-
-        <div class="cards">
-            <div class="card">
-                <p>Tổng người dùng</p>
-                <strong th:text="${userCount}">0</strong>
-            </div>
-            <div class="card">
-                <p>Tổng sản phẩm</p>
-                <strong th:text="${productCount}">0</strong>
-            </div>
-            <div class="card" sec:authorize="isAuthenticated()">
-                <p>Sản phẩm của bạn</p>
-                <strong th:text="${ownProductCount}">0</strong>
-            </div>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{layouts/layout :: head('Tổng quan')}">
+    </head>
+    <body>
+        <div th:replace="~{layouts/layout :: page(~{::section})}">
+            <section>
+                <div sec:authorize="!isAuthenticated()">
+                    <div class="panel welcome-panel">
+                        <div>
+                            <p class="eyebrow">
+                                QUẢN LÝ SHOP THẬT ĐƠN GIẢN
+                            </p>
+                            <h1>
+                                Mọi thứ gọn gàng.
+                                <br>
+                                Thao tác nhẹ nhàng.
+                            </h1>
+                            <p class="lead">
+                                Một không gian để quản lý sản phẩm, hình ảnh và tài khoản. Dễ bắt đầu, thuận tiện mỗi ngày.
+                            </p>
+                            <div class="welcome-actions">
+                                <a class="button" th:href="@{/register}">
+                                    Tạo tài khoản
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    </svg>
+                                </a>
+                                <a class="button secondary" th:href="@{/login}">
+                                    Đăng nhập
+                                </a>
+                            </div>
+                        </div>
+                        <div class="auth-art" aria-hidden="true">
+                            <div class="art-orbit">
+                            </div>
+                            <div class="art-tile">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M6 7h12l2 13H4L6 7Z"/>
+                                    <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                                </svg>
+                            </div>
+                            <div class="art-chip">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+                                Gọn gàng. Dễ sử dụng.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <article>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
+                                <path d="m8 12 3 3 5-6"/>
+                            </svg>
+                            <h3>
+                                Bắt đầu an tâm
+                            </h3>
+                            <p>
+                                Tạo tài khoản và xác thực email bằng mã OTP.
+                            </p>
+                        </article>
+                        <article>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M6 7h12l2 13H4L6 7Z"/>
+                                <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            </svg>
+                            <h3>
+                                Quản lý thuận tiện
+                            </h3>
+                            <p>
+                                Thêm sản phẩm, cập nhật hình ảnh và tìm kiếm nhanh.
+                            </p>
+                        </article>
+                        <article>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="7" height="7" rx="2"/>
+                                <rect x="14" y="3" width="7" height="7" rx="2"/>
+                                <rect x="3" y="14" width="7" height="7" rx="2"/>
+                                <rect x="14" y="14" width="7" height="7" rx="2"/>
+                            </svg>
+                            <h3>
+                                Rõ ràng mỗi ngày
+                            </h3>
+                            <p>
+                                Theo dõi số lượng và truy cập các thao tác thường dùng.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <div class="dashboard-hero">
+                        <div>
+                            <p class="eyebrow">
+                                KHÔNG GIAN LÀM VIỆC
+                            </p>
+                            <h1 th:text="|Chào ${#authentication.principal.fullName}!|">Chào bạn!</h1>
+                            <p>
+                                Tổng quan shop của bạn. Bắt đầu bằng việc thêm sản phẩm hoặc cập nhật thông tin hiện có.
+                            </p>
+                        </div>
+                        <a class="button lime" th:href="@{/products/create}">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            Thêm sản phẩm
+                        </a>
+                    </div>
+                    <div class="cards" th:classappend="${#authentication.principal.role != 'ROLE_ADMIN'} ? 'single'">
+                        <div class="card" sec:authorize="hasRole('ADMIN')">
+                            <div class="stat-top">
+                                <span>
+                                    Tổng người dùng
+                                </span>
+                                <span class="stat-icon">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="9" cy="7" r="3"/>
+                                        <path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <strong th:text="${userCount}">
+                                0
+                            </strong>
+                            <p class="note">
+                                Tài khoản trong hệ thống
+                            </p>
+                        </div>
+                        <div class="card" sec:authorize="hasRole('ADMIN')">
+                            <div class="stat-top">
+                                <span>
+                                    Tổng sản phẩm
+                                </span>
+                                <span class="stat-icon">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M6 7h12l2 13H4L6 7Z"/>
+                                        <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <strong th:text="${productCount}">
+                                0
+                            </strong>
+                            <p class="note">
+                                Sản phẩm của tất cả người dùng
+                            </p>
+                        </div>
+                        <div class="card" >
+                            <div class="stat-top">
+                                <span>
+                                    Sản phẩm của bạn
+                                </span>
+                                <span class="stat-icon">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <rect x="3" y="3" width="7" height="7" rx="2"/>
+                                        <rect x="14" y="3" width="7" height="7" rx="2"/>
+                                        <rect x="3" y="14" width="7" height="7" rx="2"/>
+                                        <rect x="14" y="14" width="7" height="7" rx="2"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <strong th:text="${ownProductCount}">
+                                0
+                            </strong>
+                            <p class="note">
+                                Sản phẩm do bạn quản lý
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section-heading">
+                        <h2>
+                            Bạn muốn làm gì?
+                        </h2>
+                        <p>
+                            Các thao tác thường dùng
+                        </p>
+                    </div>
+                    <div class="task-grid">
+                        <a class="task-card" th:href="@{/products}">
+                            <span class="task-icon">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M6 7h12l2 13H4L6 7Z"/>
+                                    <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <h3>
+                                    Quản lý sản phẩm
+                                </h3>
+                                <p>
+                                    Tìm kiếm, chỉnh sửa và cập nhật hình ảnh.
+                                </p>
+                            </div>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 12h16m-6-6 6 6-6 6"/>
+                            </svg>
+                        </a>
+                        <a class="task-card" sec:authorize="hasRole('ADMIN')" th:href="@{/users}">
+                            <span class="task-icon">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="9" cy="7" r="3"/>
+                                    <path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <h3>
+                                    Quản lý người dùng
+                                </h3>
+                                <p>
+                                    Thông tin tài khoản, vai trò và trạng thái.
+                                </p>
+                            </div>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 12h16m-6-6 6 6-6 6"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <div class="quick-links">
-            <a class="button" sec:authorize="isAuthenticated()" th:href="@{/products}">Quản lý sản phẩm</a>
-            <a class="button" sec:authorize="hasRole('ADMIN')" th:href="@{/users}">Quản lý người dùng</a>
-            <a class="button" sec:authorize="!isAuthenticated()" th:href="@{/register}">Tạo tài khoản</a>
-            <a class="button secondary" sec:authorize="!isAuthenticated()" th:href="@{/login}">Đăng nhập</a>
-        </div>
-    </section>
-</div>
-</body>
+    </body>
 </html>

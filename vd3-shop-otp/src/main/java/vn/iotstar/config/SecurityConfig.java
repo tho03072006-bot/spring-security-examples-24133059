@@ -31,7 +31,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/register", "/verify-otp", "/resend-register-otp",
                         "/forgot-password", "/reset-password",
-                        "/css/**", "/images/**", "/error", "/access-denied").permitAll()
+                        "/css/**", "/js/**", "/images/**", "/error", "/access-denied").permitAll()
                 .requestMatchers("/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             // Login bằng username; đăng nhập thành công thì principal được lưu trong session

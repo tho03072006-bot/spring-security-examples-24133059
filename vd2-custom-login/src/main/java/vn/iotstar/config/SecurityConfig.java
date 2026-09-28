@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
             .authenticationProvider(provider)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/css/**", "/images/**", "/error", "/access-denied").permitAll()
+                .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/error", "/access-denied").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             // Ô nhập tên "login" nhận cả username và email

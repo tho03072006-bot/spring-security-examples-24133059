@@ -8,11 +8,11 @@ import lombok.Data;
 @Data
 public class VerifyOtpDTO {
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "Vui lòng nhập email")
+    @Email(message = "Email không hợp lệ")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Vui lòng nhập mã OTP")
     @Pattern(regexp = "[0-9]{6}", message = "OTP phải gồm 6 chữ số")
     private String otp;
 }

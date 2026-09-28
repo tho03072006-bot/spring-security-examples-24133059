@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
-<head>
-    <title>Không có quyền</title>
-</head>
-<body>
-<main layout:fragment="content">
-    <div class="panel">
-        <h1>Không có quyền truy cập</h1>
-        <p>Chức năng này yêu cầu quyền quản trị viên.</p>
-        <a class="button" th:href="@{/}">Về trang chủ</a>
-    </div>
-</main>
-</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+    <head>
+        <title>
+            Quyền truy cập
+        </title>
+    </head>
+    <body>
+        <main id="main-content" class="site-main" tabindex="-1" layout:fragment="content">
+            <div class="panel notice-panel">
+                <div class="empty-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
+                        <path d="m8 12 3 3 5-6"/>
+                    </svg>
+                </div>
+                <p class="eyebrow">
+                    QUYỀN TRUY CẬP
+                </p>
+                <h1>
+                    Bạn chưa có quyền truy cập
+                </h1>
+                <p class="lead">
+                    Tài khoản hiện tại không được phép sử dụng chức năng này. Bạn có thể quay về tổng quan để tiếp tục.
+                </p>
+                <a class="button" th:href="@{/}">
+                    Về tổng quan
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                    </svg>
+                </a>
+            </div>
+        </main>
+    </body>
 </html>

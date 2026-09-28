@@ -1,81 +1,182 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/layout :: head('Quản lý người dùng')}"></head>
-<body>
-<div th:replace="~{layouts/layout :: page(~{::section})}">
-    <section>
-        <h1>Quản lý người dùng</h1>
-
-        <!-- Tìm kiếm + chọn số dòng mỗi trang -->
-        <div class="toolbar">
-            <form th:action="@{/users}" method="get">
-                <input name="keyword" th:value="${keyword}" placeholder="Username, email, họ tên...">
-                <label for="size">Số dòng</label>
-                <select id="size" name="size">
-                    <option th:each="n : ${ {5, 10, 20, 50} }" th:value="${n}" th:text="${n}"
-                            th:selected="${n == size}"></option>
-                </select>
-                <button type="submit">Tìm kiếm</button>
-                <a th:href="@{/users}">Xóa lọc</a>
-            </form>
-            <a class="button" th:href="@{/users/create}">+ Thêm mới</a>
-        </div>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Họ tên</th>
-                    <th>Vai trò</th>
-                    <th>Trạng thái</th>
-                    <th>Sản phẩm</th>
-                    <th>Thao tác</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="u : ${users.content}">
-                    <td th:text="${u.id}"></td>
-                    <td th:text="${u.username}"></td>
-                    <td th:text="${u.email}"></td>
-                    <td th:text="${u.fullName}"></td>
-                    <td><span class="badge" th:text="${u.roleName}"></span></td>
-                    <td th:text="${u.enabled} ? 'Hoạt động' : 'Chưa kích hoạt'"></td>
-                    <td th:text="${u.productCount}"></td>
-                    <td>
-                        <div class="actions">
-                            <a th:href="@{/users/edit/{id}(id=${u.id})}">Sửa</a>
-                            <form th:action="@{/users/delete/{id}(id=${u.id})}" method="post"
-                                  onsubmit="return confirm('Xóa người dùng và toàn bộ sản phẩm của họ?')">
-                                <button class="danger-link" type="submit">Xóa</button>
-                            </form>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{layouts/layout :: head('Quản lý người dùng')}">
+    </head>
+    <body>
+        <div th:replace="~{layouts/layout :: page(~{::section})}">
+            <section>
+                <div class="page-heading">
+                    <div>
+                        <p class="eyebrow">
+                            QUẢN TRỊ HỆ THỐNG
+                        </p>
+                        <h1>
+                            Quản lý người dùng
+                        </h1>
+                        <p class="muted">
+                            Thông tin tài khoản, quyền truy cập và số sản phẩm đang quản lý.
+                        </p>
+                    </div>
+                    <a class="button" th:href="@{/users/create}">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Thêm người dùng
+                    </a>
+                </div>
+                <div class="table-card">
+                    <div class="toolbar">
+                        <form class="filter-form" th:action="@{/users}" method="get">
+                            <div class="field search-field">
+                                <label for="keyword">
+                                    Tìm người dùng
+                                </label>
+                                <div class="search-wrap">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="10.5" cy="10.5" r="6.5"/>
+                                        <path d="m16 16 5 5"/>
+                                    </svg>
+                                    <input id="keyword" name="keyword" type="search" th:value="${keyword}" placeholder="Tên đăng nhập, email hoặc họ tên…" maxlength="200">
+                                </div>
+                            </div>
+                            <div class="field size-field">
+                                <label for="size">
+                                    Dòng / trang
+                                </label>
+                                <select id="size" name="size">
+                                    <option th:if="${size != 5 and size != 10 and size != 20 and size != 50}" th:value="${size}" th:text="${size}" selected>
+                                    </option>
+                                    <option th:each="n : ${ {5,10,20,50} }" th:value="${n}" th:text="${n}" th:selected="${n == size}">
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit">
+                                Tìm kiếm
+                            </button>
+                            <a class="button secondary" th:if="${keyword != null and !keyword.isBlank()}" th:href="@{/users}">
+                                Xóa lọc
+                            </a>
+                        </form>
+                    </div>
+                    <div class="table-wrap" th:unless="${users.empty}" role="region" aria-label="Danh sách người dùng, cuộn ngang trên màn hình nhỏ" tabindex="0">
+                        <table class="users-table">
+                            <caption class="sr-only">
+                                Danh sách người dùng
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Người dùng
+                                    </th>
+                                    <th scope="col">
+                                        Email
+                                    </th>
+                                    <th scope="col">
+                                        Vai trò
+                                    </th>
+                                    <th scope="col">
+                                        Trạng thái
+                                    </th>
+                                    <th scope="col">
+                                        Sản phẩm
+                                    </th>
+                                    <th scope="col">
+                                        Thao tác
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="u : ${users.content}">
+                                    <td>
+                                        <span class="row-title" th:text="${u.fullName}">
+                                        </span>
+                                        <span class="row-subtitle" th:text="|${u.username} · #${u.id}|">
+                                        </span>
+                                    </td>
+                                    <td th:text="${u.email}">
+                                    </td>
+                                    <td>
+                                        <span class="badge" th:classappend="${u.roleName == 'ROLE_ADMIN'} ? 'admin'" th:title="${u.roleName}" th:text="${u.roleName == 'ROLE_ADMIN'} ? 'Quản trị viên' : 'Thành viên'">
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge" th:classappend="${!u.enabled} ? 'pending'" th:text="${u.enabled} ? 'Hoạt động' : 'Chưa kích hoạt'">
+                                        </span>
+                                    </td>
+                                    <td th:text="${u.productCount}">
+                                    </td>
+                                    <td>
+                                        <div class="actions">
+                                            <a th:href="@{/users/edit/{id}(id=${u.id})}" th:attr="aria-label=|Sửa ${u.username}|">
+                                                Sửa
+                                            </a>
+                                            <form method="post" th:action="@{/users/delete/{id}(id=${u.id})}" th:attr="data-confirm=|Xóa người dùng “${u.username}”? Toàn bộ sản phẩm và ảnh của người dùng này cũng sẽ bị xóa. Hành động này không thể hoàn tác.|" onsubmit="return window.iotstarConfirm ? window.iotstarConfirm(this, event) : confirm(this.dataset.confirm)">
+                                                <button type="submit" class="danger-link" th:attr="aria-label=|Xóa ${u.username}|">
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" th:if="${users.empty}">
+                        <div class="empty-icon">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="10.5" cy="10.5" r="6.5"/>
+                                <path d="m16 16 5 5"/>
+                            </svg>
                         </div>
-                    </td>
-                </tr>
-                <tr th:if="${users.empty}">
-                    <td colspan="8">Không có dữ liệu.</td>
-                </tr>
-                </tbody>
-            </table>
+                        <h2 th:text="${keyword != null and !keyword.isBlank()} ? 'Không tìm thấy kết quả' : 'Chưa có người dùng'">
+                        </h2>
+                        <p th:text="${keyword != null and !keyword.isBlank()} ? 'Thử từ khóa khác hoặc xóa bộ lọc để xem toàn bộ danh sách.' : 'Thêm người dùng đầu tiên để bắt đầu quản lý tại đây.'">
+                        </p>
+                        <a class="button secondary" th:if="${keyword != null and !keyword.isBlank()}" th:href="@{/users}">
+                            Xóa bộ lọc
+                        </a>
+                        <a class="button" th:unless="${keyword != null and !keyword.isBlank()}" th:href="@{/users/create}">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            Thêm người dùng
+                        </a>
+                    </div>
+                    <div class="table-footer">
+                        <p class="note" th:text="${users.empty} ? '0 kết quả' : |Hiển thị ${users.number * users.size + 1}–${users.number * users.size + users.numberOfElements} trong ${users.totalElements} kết quả|">
+                        </p>
+                        <nav class="pagination" aria-label="Phân trang" th:with="start=${T(java.lang.Math).max(0, users.number - 2)},end=${T(java.lang.Math).min(users.totalPages - 1, users.number + 2)}">
+                            <a th:if="${users.hasPrevious()}" th:href="@{/users(page=${users.number - 1},size=${size},keyword=${keyword})}" aria-label="Trang trước">
+                                Trước
+                            </a>
+                            <span class="disabled" th:unless="${users.hasPrevious()}">
+                                Trước
+                            </span>
+                            <th:block th:if="${users.totalPages > 0}">
+                                <a th:if="${start > 0}" th:href="@{/users(page=${0},size=${size},keyword=${keyword})}" aria-label="Trang 1">
+                                    1
+                                </a>
+                                <span class="ellipsis" th:if="${start > 1}" aria-hidden="true">
+                                    …
+                                </span>
+                                <a th:each="i : ${#numbers.sequence(start,end)}" th:href="@{/users(page=${i},size=${size},keyword=${keyword})}" th:classappend="${i == users.number} ? 'active'" th:attr="aria-current=${i == users.number ? 'page' : null},aria-label=|Trang ${i + 1}|" th:text="${i + 1}">
+                                </a>
+                                <span class="ellipsis" th:if="${end < users.totalPages - 2}" aria-hidden="true">
+                                    …
+                                </span>
+                                <a th:if="${end < users.totalPages - 1}" th:href="@{/users(page=${users.totalPages - 1},size=${size},keyword=${keyword})}" th:text="${users.totalPages}" th:attr="aria-label=|Trang ${users.totalPages}|">
+                                </a>
+                            </th:block>
+                            <a th:if="${users.hasNext()}" th:href="@{/users(page=${users.number + 1},size=${size},keyword=${keyword})}" aria-label="Trang sau">
+                                Sau
+                            </a>
+                            <span class="disabled" th:unless="${users.hasNext()}">
+                                Sau
+                            </span>
+                        </nav>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <!-- Phân trang, giữ nguyên từ khóa và số dòng -->
-        <div class="pagination">
-            <a th:if="${users.hasPrevious()}"
-               th:href="@{/users(page=${users.number - 1}, size=${size}, keyword=${keyword})}">Trước</a>
-            <th:block th:if="${users.totalPages > 0}">
-                <a th:each="i : ${#numbers.sequence(0, users.totalPages - 1)}"
-                   th:href="@{/users(page=${i}, size=${size}, keyword=${keyword})}"
-                   th:classappend="${i == users.number} ? 'active'"
-                   th:text="${i + 1}"></a>
-            </th:block>
-            <a th:if="${users.hasNext()}"
-               th:href="@{/users(page=${users.number + 1}, size=${size}, keyword=${keyword})}">Sau</a>
-        </div>
-        <p class="note" th:text="|Tổng: ${users.totalElements} bản ghi|"></p>
-    </section>
-</div>
-</body>
+    </body>
 </html>

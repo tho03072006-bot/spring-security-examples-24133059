@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<!-- Ví dụ 2: layout dùng Thymeleaf Layout Dialect; trang con khai báo layout:decorate -->
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title layout:title-pattern="$CONTENT_TITLE | IOTSTAR SHOP">IOTSTAR SHOP</title>
-    <link rel="stylesheet" th:href="@{/css/app.css}">
-</head>
-<body>
-<header th:replace="~{fragments/header :: header}"></header>
-<main layout:fragment="content"></main>
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#176b52">
+        <link rel="stylesheet" th:href="@{/css/app.css}">
+        <script defer th:src="@{/js/app.js}">
+        </script>
+        <title layout:title-pattern="$CONTENT_TITLE | IOTSTAR SHOP">
+            IOTSTAR SHOP
+        </title>
+    </head>
+    <body>
+        <a class="skip-link" href="#main-content">
+            Đến nội dung chính
+        </a>
+        <header th:replace="~{fragments/header :: header}">
+        </header>
+        <main id="main-content" class="site-main" tabindex="-1" layout:fragment="content">
+        </main>
+        <footer th:replace="~{fragments/footer :: footer}">
+        </footer>
+        <div th:replace="~{fragments/ui :: helpers}">
+        </div>
+    </body>
 </html>

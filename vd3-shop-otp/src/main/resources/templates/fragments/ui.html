@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="helpers">
+            <p id="ui-live" class="sr-only" aria-live="polite" aria-atomic="true">
+            </p>
+            <dialog id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-description">
+                <h2 id="delete-title">
+                    Xác nhận xóa
+                </h2>
+                <p id="delete-description">
+                </p>
+                <div class="dialog-actions">
+                    <form method="dialog">
+                        <button id="delete-cancel" class="secondary" type="submit">
+                            Giữ lại
+                        </button>
+                    </form>
+                    <button id="delete-confirm" class="danger" type="button">
+                        Xóa bản ghi
+                    </button>
+                </div>
+            </dialog>
+        </div>
+    </body>
+</html>

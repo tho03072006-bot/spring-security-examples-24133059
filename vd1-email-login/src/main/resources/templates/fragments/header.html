@@ -1,26 +1,53 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body>
-<header th:fragment="header">
-    <a class="brand" th:href="@{/}">IOTSTAR SHOP</a>
-    <nav>
-        <a th:href="@{/}">Trang chủ</a>
-        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Quản trị</a>
-    </nav>
-
-    <!-- Thông tin user lấy từ principal (CustomUserDetails) trong session -->
-    <div class="account" sec:authorize="isAuthenticated()" th:with="me=${#authentication.principal}">
-        <img class="avatar" th:src="@{${me.images ?: '/images/avatar.svg'}}" alt="Ảnh đại diện">
-        <div>
-            <span th:text="${me.fullName}">Họ tên</span>
-            <span class="muted" th:text="|${me.email} · ${me.role}|">email · role</span>
-        </div>
-        <form th:action="@{/logout}" method="post">
-            <button class="link-button" type="submit">Đăng xuất</button>
-        </form>
-    </div>
-    <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Đăng nhập</a>
-</header>
-</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <body>
+        <header class="site-header" th:fragment="header">
+            <div class="header-inner">
+                <a class="brand" th:href="@{/}" aria-label="IOTSTAR SHOP — trang chủ">
+                    <span class="brand-mark">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 7h12l2 13H4L6 7Z"/>
+                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                        </svg>
+                    </span>
+                    IOTSTAR SHOP
+                </a>
+                <nav class="site-nav" aria-label="Điều hướng chính">
+                    <a th:href="@{/}">
+                        Tổng quan
+                    </a>
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">
+                        Quản trị
+                    </a>
+                </nav>
+                <div class="account" sec:authorize="isAuthenticated()" th:with="me=${#authentication.principal}">
+                    <img class="avatar" th:src="@{${me.images ?: '/images/avatar.svg'}}" alt="Ảnh đại diện">
+                    <div class="account-info">
+                        <span class="account-name" th:text="${me.fullName}" th:title="${me.fullName}">
+                        </span>
+                        <span class="account-email" th:text="${me.email}" th:title="|${me.email} · ${me.username} · ${me.role}|">
+                        </span>
+                    </div>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="logout" aria-label="Đăng xuất" title="Đăng xuất">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 4H4v16h5m6-12 4 4-4 4M9 12h10"/>
+                            </svg>
+                            <span>
+                                Đăng xuất
+                            </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="header-login" sec:authorize="!isAuthenticated()">
+                    <a class="button small secondary" th:href="@{/login}">
+                        Đăng nhập
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12h16m-6-6 6 6-6 6"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </header>
+    </body>
 </html>

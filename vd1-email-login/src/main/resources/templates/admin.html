@@ -1,14 +1,44 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/layout :: head('Quản trị')}"></head>
-<body>
-<div th:replace="~{layouts/layout :: page(~{::section})}">
-    <section>
-        <div class="panel">
-            <h1>Trang quản trị</h1>
-            <p>Bạn đã đăng nhập với vai trò ROLE_ADMIN.</p>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{layouts/layout :: head('Quản trị')}">
+    </head>
+    <body>
+        <div th:replace="~{layouts/layout :: page(~{::section})}">
+            <section>
+                <div class="dashboard-hero">
+                    <div>
+                        <p class="eyebrow">
+                            KHU VỰC QUẢN TRỊ
+                        </p>
+                        <h1>
+                            Trang quản trị
+                        </h1>
+                        <p>
+                            Bạn đang truy cập bằng tài khoản có vai trò quản trị viên.
+                        </p>
+                    </div>
+                    <div class="hero-symbol">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
+                            <path d="m8 12 3 3 5-6"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h2>
+                        Quyền truy cập đã được xác nhận
+                    </h2>
+                    <p class="lead">
+                        Chỉ tài khoản có quyền ROLE_ADMIN có thể mở trang này. Thông tin cá nhân của bạn được hiển thị ở trang tổng quan.
+                    </p>
+                    <a class="button secondary" th:href="@{/}">
+                        Quay về tổng quan
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12h16m-6-6 6 6-6 6"/>
+                        </svg>
+                    </a>
+                </div>
+            </section>
         </div>
-    </section>
-</div>
-</body>
+    </body>
 </html>

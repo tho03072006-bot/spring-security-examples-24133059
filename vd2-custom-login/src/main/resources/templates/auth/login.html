@@ -1,31 +1,144 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
-<head>
-    <title>Đăng nhập</title>
-</head>
-<body>
-<main layout:fragment="content">
-    <div class="auth-card">
-        <p class="eyebrow">VÍ DỤ 2 / SPRING SECURITY</p>
-        <h1>Đăng nhập</h1>
-        <div class="alert error" th:if="${param.error}">
-            Username/email hoặc mật khẩu không đúng, hoặc tài khoản chưa được kích hoạt.
-        </div>
-        <div class="alert success" th:if="${param.logout}">Đã đăng xuất thành công.</div>
-        <div class="alert error" th:if="${param.expired}">Phiên đăng nhập đã hết hạn.</div>
-
-        <!-- th:action tự chèn CSRF token vào form -->
-        <form th:action="@{/login}" method="post">
-            <label for="login">Username hoặc email</label>
-            <input id="login" type="text" name="login" autocomplete="username" required autofocus>
-            <label for="password">Mật khẩu</label>
-            <input id="password" type="password" name="password" autocomplete="current-password" required>
-            <button class="full" type="submit">Đăng nhập</button>
-        </form>
-        <p class="note">Tài khoản mẫu: admin / 123456</p>
-    </div>
-</main>
-</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+    <head>
+        <title>
+            Đăng nhập
+        </title>
+    </head>
+    <body>
+        <main id="main-content" class="site-main" tabindex="-1" layout:fragment="content">
+            <div class="auth-shell">
+                <aside class="auth-story">
+                    <div>
+                        <p class="eyebrow">
+                            IOTSTAR SHOP
+                        </p>
+                        <h2>
+                            Chào mừng bạn
+                            <br>
+                            trở lại.
+                        </h2>
+                        <p>
+                            Truy cập tài khoản của bạn và bắt đầu với những thao tác thật đơn giản.
+                        </p>
+                        <ul class="auth-benefits">
+                            <li>
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+                                Đăng nhập nhanh với tài khoản của bạn
+                            </li>
+                            <li>
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+                                Thông tin cá nhân luôn dễ tìm
+                            </li>
+                            <li>
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+                                Điều hướng theo quyền truy cập
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="auth-art" aria-hidden="true">
+                        <div class="art-orbit">
+                        </div>
+                        <div class="art-tile">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M6 7h12l2 13H4L6 7Z"/>
+                                <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            </svg>
+                        </div>
+                        <div class="art-chip">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m5 12 4 4L19 6"/>
+                            </svg>
+                            Gọn gàng. Dễ sử dụng.
+                        </div>
+                    </div>
+                    <small>
+                        Không gian làm việc của bạn, theo cách đơn giản hơn.
+                    </small>
+                </aside>
+                <div class="auth-form">
+                    <p class="eyebrow">
+                        CHÀO MỪNG TRỞ LẠI
+                    </p>
+                    <h1>
+                        Đăng nhập
+                    </h1>
+                    <p class="lead">
+                        Truy cập không gian làm việc của bạn.
+                    </p>
+                    <div class="alert error error-summary" role="alert" tabindex="-1" th:if="${param.error}">
+                        Thông tin đăng nhập không đúng hoặc tài khoản chưa được kích hoạt. Vui lòng kiểm tra và thử lại.
+                    </div>
+                    <div class="alert success" role="status" th:if="${param.logout}">
+                        Bạn đã đăng xuất thành công.
+                    </div>
+                    <div class="alert error" role="alert" th:if="${param.expired}">
+                        Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.
+                    </div>
+                    <form th:action="@{/login}" method="post">
+                        <div class="field">
+                            <label for="login">
+                                Tên đăng nhập hoặc email
+                                <span class=required aria-hidden=true>
+                                    *
+                                </span>
+                            </label>
+                            <input id="login" type="text" name="login"  aria-describedby="login-help login-error" required autocomplete="username" maxlength="150">
+                            <small class="field-help" id="login-help">
+                                Bạn có thể dùng tên đăng nhập hoặc địa chỉ email.
+                            </small>
+                            <span id=login-error>
+                            </span>
+                        </div>
+                        <div class="field">
+                            <label for="password">
+                                Mật khẩu
+                                <span class=required aria-hidden=true>
+                                    *
+                                </span>
+                            </label>
+                            <div class="password-wrap">
+                                <input id="password" type="password" name="password"  aria-describedby="password-help password-error" required autocomplete="current-password" data-label="mật khẩu">
+                                <button type="button" class="password-toggle" data-password-toggle aria-controls="password" aria-label="Hiện mật khẩu" aria-pressed="false" hidden>
+                                    Hiện
+                                </button>
+                            </div>
+                            <small class="field-help" id="password-help">
+                            </small>
+                            <span id=password-error>
+                            </span>
+                        </div>
+                        <button type="submit" class="full" data-loading-text="Đang đăng nhập…">
+                            Đăng nhập
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 12h16m-6-6 6 6-6 6"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <details class="demo-note">
+                        <summary>
+                            Tài khoản dùng thử cho bài thực hành
+                        </summary>
+                        <p>
+                            Quản trị:
+                            <b>
+                                admin
+                            </b>
+                            <br>
+                            Mật khẩu:
+                            <b>
+                                123456
+                            </b>
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </main>
+    </body>
 </html>

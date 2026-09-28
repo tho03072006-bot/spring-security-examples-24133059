@@ -15,11 +15,11 @@ public class RegisterDTO {
 
     @NotBlank(message = "Email không được để trống")
     @Email(message = "Email không hợp lệ")
-    @Size(max = 150)
+    @Size(max = 150, message = "Email không được vượt quá 150 ký tự")
     private String email;
 
     @NotBlank(message = "Họ tên không được để trống")
-    @Size(max = 150)
+    @Size(max = 150, message = "Họ tên không được vượt quá 150 ký tự")
     private String fullName;
 
     // BCrypt chỉ xử lý tối đa 72 byte

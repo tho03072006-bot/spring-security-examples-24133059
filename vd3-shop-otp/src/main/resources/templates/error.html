@@ -1,15 +1,31 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/layout :: head('Có lỗi xảy ra')}"></head>
-<body>
-<div th:replace="~{layouts/layout :: page(~{::section})}">
-    <section>
-        <div class="panel">
-            <h1>Có lỗi xảy ra</h1>
-            <p th:text="${message}">Vui lòng kiểm tra yêu cầu và thử lại.</p>
-            <a class="button" th:href="@{/}">Về trang chủ</a>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{layouts/layout :: head('Có lỗi xảy ra')}">
+    </head>
+    <body>
+        <div th:replace="~{layouts/layout :: page(~{::section})}">
+            <section>
+                <div class="panel notice-panel">
+                    <div class="empty-icon">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
+                            <path d="m8 12 3 3 5-6"/>
+                        </svg>
+                    </div>
+                    <h1>
+                        Chưa thể hoàn tất yêu cầu
+                    </h1>
+                    <p class="lead" th:text="${message}">
+                        Vui lòng kiểm tra thông tin và thử lại.
+                    </p>
+                    <a class="button" th:href="@{/}">
+                        Về tổng quan
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12h16m-6-6 6 6-6 6"/>
+                        </svg>
+                    </a>
+                </div>
+            </section>
         </div>
-    </section>
-</div>
-</body>
+    </body>
 </html>

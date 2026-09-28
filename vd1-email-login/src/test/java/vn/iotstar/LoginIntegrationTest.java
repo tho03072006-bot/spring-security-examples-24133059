@@ -36,6 +36,14 @@ class LoginIntegrationTest {
     }
 
     @Test
+    void loginScriptLoadsWithoutAuthentication() throws Exception {
+        mvc.perform(get("/js/app.js"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("text/javascript"))
+                .andExpect(content().string(containsString("data-password-toggle")));
+    }
+
+    @Test
     void publicPagesRender() throws Exception {
         mvc.perform(get("/"))
                 .andExpect(status().isOk())

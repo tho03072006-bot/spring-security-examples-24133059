@@ -1,25 +1,105 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
-<head>
-    <title>Trang chủ</title>
-</head>
-<body>
-<main layout:fragment="content">
-    <p class="eyebrow">VÍ DỤ 2</p>
-    <h1>Trang chủ IOTSTAR SHOP</h1>
-    <div class="panel">
-        <p sec:authorize="isAuthenticated()">
-            Xin chào <strong th:text="${#authentication.principal.fullName}">User</strong>.
-            Thông tin tài khoản của bạn được hiển thị trên header.
-        </p>
-        <p sec:authorize="!isAuthenticated()">Đăng nhập để xem thông tin tài khoản.</p>
-        <p>Đăng nhập bằng username hoặc email; layout sử dụng Thymeleaf Layout Dialect.</p>
-        <a class="button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Đăng nhập</a>
-        <a class="button" sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Trang quản trị</a>
-    </div>
-</main>
-</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+    <head>
+        <title>
+            Tổng quan
+        </title>
+    </head>
+    <body>
+        <main id="main-content" class="site-main" tabindex="-1" layout:fragment="content">
+            <div class="panel welcome-panel" sec:authorize="!isAuthenticated()">
+                <div>
+                    <p class="eyebrow">
+                        KHÔNG GIAN TÀI KHOẢN
+                    </p>
+                    <h1>
+                        Chào bạn.
+                        <br>
+                        Bắt đầu thật dễ dàng.
+                    </h1>
+                    <p class="lead">
+                        Đăng nhập để xem thông tin tài khoản và truy cập những chức năng dành cho bạn.
+                    </p>
+                    <a class="button" th:href="@{/login}">
+                        Đăng nhập
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12h16m-6-6 6 6-6 6"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="auth-art" aria-hidden="true">
+                    <div class="art-orbit">
+                    </div>
+                    <div class="art-tile">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 7h12l2 13H4L6 7Z"/>
+                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                        </svg>
+                    </div>
+                    <div class="art-chip">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m5 12 4 4L19 6"/>
+                        </svg>
+                        Gọn gàng. Dễ sử dụng.
+                    </div>
+                </div>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:with="me=${#authentication.principal}">
+                <div class="dashboard-hero">
+                    <div>
+                        <p class="eyebrow">
+                            TỔNG QUAN TÀI KHOẢN
+                        </p>
+                        <h1 th:text="|Chào ${me.fullName}!|">Chào bạn!</h1>
+                        <p>
+                            Bạn đã đăng nhập thành công. Thông tin tài khoản của bạn ở ngay bên dưới.
+                        </p>
+                    </div>
+                    <div class="hero-symbol">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
+                            <path d="m8 12 3 3 5-6"/>
+                        </svg>
+                    </div>
+                </div>
+                <h2>
+                    Thông tin của bạn
+                </h2>
+                <div class="panel profile-panel">
+                    <img class="avatar" th:src="@{${me.images ?: '/images/avatar.svg'}}" alt="Ảnh đại diện">
+                    <dl class="profile-details">
+                        <div>
+                            <dt>
+                                Tên đăng nhập
+                            </dt>
+                            <dd th:text="${me.username}">
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>
+                                Email
+                            </dt>
+                            <dd th:text="${me.email}">
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>
+                                Vai trò
+                            </dt>
+                            <dd th:text="${me.role}">
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+                <p style="margin-top:24px" sec:authorize="hasRole('ADMIN')">
+                    <a class="button" th:href="@{/admin}">
+                        Mở trang quản trị
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12h16m-6-6 6 6-6 6"/>
+                        </svg>
+                    </a>
+                </p>
+            </div>
+        </main>
+    </body>
 </html>

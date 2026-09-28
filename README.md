@@ -92,6 +92,14 @@ Ví dụ 3 lưu thư tại **`vd3-shop-otp/data/mailbox/<email>.txt`** khi chạ
 5. OTP hết hạn sau **5 phút**, chỉ dùng **một lần**, tối đa **5 lần thử**. Gửi lại cách nhau tối thiểu **60 giây**; token cũ bị vô hiệu hóa.
 6. OTP đăng ký và OTP đặt lại mật khẩu có mục đích riêng; không dùng thay thế nhau.
 
+## Giao diện mới
+
+Giao diện xanh lục và nền sáng được áp dụng đồng bộ cho ba ví dụ, với bố cục thích ứng máy tính/điện thoại. Form có hiện/ẩn mật khẩu, hướng dẫn OTP, thông báo lỗi bằng tiếng Việt và trạng thái đang xử lý. Màn hình quản lý có tìm kiếm, phân trang gọn, trạng thái trống, xem trước ảnh và xác nhận xóa có tên bản ghi.
+
+Xem [nguồn tham khảo, thay đổi UX và ảnh minh chứng](docs/GIAO_DIEN_UX.md).
+
+![Dashboard mới](docs/screenshots/ui-dashboard-desktop.png)
+
 ## Quản lý user và sản phẩm
 
 - Admin được vào `/users`, thêm/sửa/xóa user, đổi role và trạng thái kích hoạt, tìm theo username/email/họ tên, chọn số dòng mỗi trang.

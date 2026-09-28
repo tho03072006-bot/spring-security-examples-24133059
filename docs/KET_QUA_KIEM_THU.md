@@ -3,13 +3,13 @@
 Ngày kiểm tra: 28/09/2026.
 
 Lệnh: `mvn clean verify` với JDK 26.0.2.1, Maven 3.9.16.
-Kết quả: **BUILD SUCCESS**, 42 test, 0 failure, 0 error, 0 skipped. Lần build gần nhất hoàn tất lúc 10:25 ngày 28/09/2026.
+Kết quả: **BUILD SUCCESS**, 45 test, 0 failure, 0 error, 0 skipped. Lần build gần nhất hoàn tất lúc 13:44 ngày 28/09/2026.
 
 | Module | Test suite | Số test | Failure | Error |
 |---|---|---:|---:|---:|
-| vd1-email-login | vn.iotstar.LoginIntegrationTest | 8 | 0 | 0 |
-| vd2-custom-login | vn.iotstar.LoginIntegrationTest | 9 | 0 | 0 |
-| vd3-shop-otp | vn.iotstar.LoginIntegrationTest | 8 | 0 | 0 |
+| vd1-email-login | vn.iotstar.LoginIntegrationTest | 9 | 0 | 0 |
+| vd2-custom-login | vn.iotstar.LoginIntegrationTest | 10 | 0 | 0 |
+| vd3-shop-otp | vn.iotstar.LoginIntegrationTest | 9 | 0 | 0 |
 | vd3-shop-otp | vn.iotstar.ShopIntegrationTest | 17 | 0 | 0 |
 
 ## Các luồng được kiểm tra tự động
@@ -19,7 +19,13 @@ Kết quả: **BUILD SUCCESS**, 42 test, 0 failure, 0 error, 0 skipped. Lần bu
 - Ví dụ 3: đăng ký và xác thực OTP; OTP hết hạn, dùng một lần, giới hạn 5 lần thử, cooldown gửi lại, token cũ bị thay; tách mục đích đăng ký/reset; đổi mật khẩu và BCrypt; validation form; CRUD user/product; sửa user giữ nguyên ảnh đại diện; tìm kiếm/phân trang; đếm sản phẩm; upload/thay/xóa ảnh local; kiểm tra quyền sở hữu; xóa user cùng sản phẩm; chống trùng username/email và tự xóa admin.
 - Kiểm tra tìm sản phẩm theo từ khóa tiếng Việt ở cuối mô tả dài hơn 4.000 ký tự, khác chữ hoa/thường; sản phẩm có mô tả null vẫn tìm được theo tên.
 
-## Kiểm tra chạy ứng dụng và trình duyệt
+## Kiểm tra giao diện nâng cấp
+
+Bản giao diện mới đã được kiểm tra trên các ứng dụng dùng SQL Server. Các thao tác hiện/ẩn mật khẩu, login/logout, tìm kiếm, phân trang, mở/hủy xác nhận xóa, xem trước/bỏ ảnh, đếm ký tự và focus khi validation lỗi đều đã được kiểm tra. Thử bố cục ở chiều rộng 320, 390 và 768 px; không tràn ngang trang ở các màn hình đã thử. Các thông báo validation được chuẩn hóa sang tiếng Việt.
+
+Ba test mới kiểm tra JavaScript của trang login tải được khi chưa đăng nhập. Xem [nguồn tham khảo và ảnh giao diện mới](GIAO_DIEN_UX.md). Không gửi thêm email OTP trong đợt kiểm tra giao diện này.
+
+## Kiểm tra chạy ứng dụng và trình duyệt ban đầu
 
 - Các JAR chạy bằng JDK 26 với profile demo. Ví dụ 1 đã login bằng email; ví dụ 2 đã login bằng email và hiển thị họ tên/ảnh USER trên header; ba cookie session riêng không ghi đè nhau.
 - Ví dụ 3: đăng nhập admin bằng form trên trình duyệt, header hiển thị fullname/email/ảnh/ROLE_ADMIN; xem danh sách user; tạo sản phẩm mẫu **Điện thoại Oppo A95**, giá **6,500,000.00**, chủ sở hữu **admin**.
@@ -58,5 +64,5 @@ Profile SQL Server, Spring Mail SMTP và Cloudinary SDK đã được triển kh
 - **SQL Server thật: đã xác minh.** Đã tạo `security_vd1`, `security_vd2`, `security_vd3`, chạy cả ba ứng dụng với SQL login và kiểm thử các luồng HTTP nêu trên.
 - **SMTP thật: đã xác minh xác thực và gửi thư.** Hai email đăng ký/reset được SMTP chấp nhận; các bước xác nhận OTP và đặt lại mật khẩu đã đạt trên SQL Server.
 
-Thông tin SQL Server, SMTP và Cloudinary chỉ lưu trong `.env` local, không đưa lên Git. Bộ 42 test tự động dùng H2 và dịch vụ mail/ảnh local; các kiểm tra dịch vụ thật được thực hiện riêng.
+Thông tin SQL Server, SMTP và Cloudinary chỉ lưu trong `.env` local, không đưa lên Git. Bộ 45 test tự động dùng H2 và dịch vụ mail/ảnh local; các kiểm tra dịch vụ thật được thực hiện riêng.
 Không sử dụng các secret minh họa trong PDF.

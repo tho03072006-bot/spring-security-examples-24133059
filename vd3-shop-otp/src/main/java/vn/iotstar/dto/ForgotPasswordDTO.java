@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ForgotPasswordDTO {
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "Vui lòng nhập email")
+    @Email(message = "Email không hợp lệ")
     private String email;
 }

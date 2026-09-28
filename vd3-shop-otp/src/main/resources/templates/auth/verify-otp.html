@@ -1,36 +1,144 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/layout :: head('Xác nhận OTP')}"></head>
-<body>
-<div th:replace="~{layouts/layout :: page(~{::section})}">
-    <section>
-        <div class="auth-card">
-            <h1>Xác nhận OTP</h1>
-            <form th:action="@{/verify-otp}" th:object="${verifyOtpDTO}" method="post">
-                <div class="alert error" th:if="${#fields.hasGlobalErrors()}">
-                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{layouts/layout :: head('Xác thực email')}">
+    </head>
+    <body>
+        <div th:replace="~{layouts/layout :: page(~{::section})}">
+            <section>
+                <div class="auth-shell">
+                    <aside class="auth-story">
+                        <div>
+                            <p class="eyebrow">
+                                IOTSTAR SHOP
+                            </p>
+                            <h2>
+                                Một nơi cho mọi
+                                <br>
+                                việc của bạn.
+                            </h2>
+                            <p>
+                                Quản lý sản phẩm và tài khoản trong một không gian đơn giản, rõ ràng.
+                            </p>
+                            <ul class="auth-benefits">
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m5 12 4 4L19 6"/>
+                                    </svg>
+                                    Tài khoản được xác thực qua email
+                                </li>
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m5 12 4 4L19 6"/>
+                                    </svg>
+                                    Sản phẩm và hình ảnh ở cùng một nơi
+                                </li>
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m5 12 4 4L19 6"/>
+                                    </svg>
+                                    Thao tác thuận tiện trên mọi thiết bị
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="auth-art" aria-hidden="true">
+                            <div class="art-orbit">
+                            </div>
+                            <div class="art-tile">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M6 7h12l2 13H4L6 7Z"/>
+                                    <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                                </svg>
+                            </div>
+                            <div class="art-chip">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+                                Gọn gàng. Dễ sử dụng.
+                            </div>
+                        </div>
+                        <small>
+                            Không gian làm việc của bạn, theo cách đơn giản hơn.
+                        </small>
+                    </aside>
+                    <div class="auth-form">
+                        <ol class="stepper" aria-label="Tiến trình đăng ký">
+                            <li class="">
+                                1. Tạo tài khoản
+                            </li>
+                            <li class="current">
+                                2. Xác thực email
+                            </li>
+                            <li>
+                                3. Đăng nhập
+                            </li>
+                        </ol>
+                        <h1>
+                            Xác thực email
+                        </h1>
+                        <p class="lead">
+                            Kiểm tra hộp thư đến hoặc thư rác, sau đó nhập mã OTP để kích hoạt tài khoản.
+                        </p>
+                        <form th:action="@{/verify-otp}" th:object="${verifyOtpDTO}" method="post">
+                            <div class="alert error error-summary" role="alert" tabindex="-1" th:if="${#fields.hasAnyErrors()}">
+                                <h2>
+                                    Vui lòng kiểm tra lại thông tin
+                                </h2>
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="field">
+                                <label for="email">
+                                    Email
+                                    <span class=required aria-hidden=true>
+                                        *
+                                    </span>
+                                </label>
+                                <input id="email" type="email" th:field="*{email}" th:attr="aria-invalid=${#fields.hasErrors('email')}" aria-describedby="email-help email-error" required autocomplete="email" maxlength="150">
+                                <small class="field-help" id="email-help">
+                                </small>
+                                <small id="email-error" class="error-text" th:errors="*{email}">
+                                </small>
+                            </div>
+                            <div class="field">
+                                <label for="otp">
+                                    Mã OTP
+                                    <span class=required aria-hidden=true>
+                                        *
+                                    </span>
+                                </label>
+                                <input id="otp" type="text" th:field="*{otp}" th:attr="aria-invalid=${#fields.hasErrors('otp')}" aria-describedby="otp-help otp-error" required autocomplete="one-time-code" class="otp-input" inputmode="numeric" maxlength="6" minlength="6" pattern="[0-9]{6}">
+                                <small class="field-help" id="otp-help">
+                                    Nhập đủ 6 chữ số trong email. Mã có hiệu lực 5 phút.
+                                </small>
+                                <small id="otp-error" class="error-text" th:errors="*{otp}">
+                                </small>
+                            </div>
+                            <button class="full" type="submit" data-loading-text="Đang xác thực…">
+                                Xác nhận và kích hoạt
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+                            </button>
+                        </form>
+                        <form class="resend-form" th:action="@{/resend-register-otp}" method="post">
+                            <input type="hidden" name="email" th:value="${verifyOtpDTO.email}">
+                            <button class="secondary full" type="submit" data-loading-text="Đang gửi lại mã…">
+                                Gửi lại mã OTP
+                            </button>
+                        </form>
+                        <p class="field-help">
+                            Chờ 60 giây giữa hai lần gửi. Mã mới sẽ thay thế mã cũ.
+                        </p>
+                        <p class="auth-footer">
+                            <a th:href="@{/login}">
+                                Quay lại đăng nhập
+                            </a>
+                        </p>
+                    </div>
                 </div>
-
-                <label for="email">Email</label>
-                <input id="email" type="email" th:field="*{email}" required>
-                <small class="error-text" th:errors="*{email}"></small>
-
-                <label for="otp">OTP 6 chữ số</label>
-                <input id="otp" type="text" th:field="*{otp}" maxlength="6" inputmode="numeric" required>
-                <small class="error-text" th:errors="*{otp}"></small>
-
-                <button class="full" type="submit">Xác nhận</button>
-            </form>
-
-            <!-- Gửi lại OTP: mã cũ bị vô hiệu hóa -->
-            <form th:action="@{/resend-register-otp}" method="post">
-                <input type="hidden" name="email" th:value="${verifyOtpDTO.email}">
-                <button class="secondary full" type="submit">Gửi lại OTP</button>
-            </form>
-            <p class="note">OTP hết hạn sau 5 phút. Chờ 60 giây giữa hai lần gửi.</p>
-            <p><a th:href="@{/login}">Quay lại đăng nhập</a></p>
+            </section>
         </div>
-    </section>
-</div>
-</body>
+    </body>
 </html>

@@ -1,82 +1,183 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{layouts/layout :: head('Quản lý sản phẩm')}"></head>
-<body>
-<div th:replace="~{layouts/layout :: page(~{::section})}">
-    <section>
-        <h1>Quản lý sản phẩm</h1>
-        <p class="note" sec:authorize="!hasRole('ADMIN')">Danh sách sản phẩm thuộc tài khoản của bạn.</p>
-
-        <!-- Tìm kiếm + chọn số dòng mỗi trang -->
-        <div class="toolbar">
-            <form th:action="@{/products}" method="get">
-                <input name="keyword" th:value="${keyword}" placeholder="Tên sản phẩm, mô tả...">
-                <label for="size">Số dòng</label>
-                <select id="size" name="size">
-                    <option th:each="n : ${ {5, 10, 20, 50} }" th:value="${n}" th:text="${n}"
-                            th:selected="${n == size}"></option>
-                </select>
-                <button type="submit">Tìm kiếm</button>
-                <a th:href="@{/products}">Xóa lọc</a>
-            </form>
-            <a class="button" th:href="@{/products/create}">+ Thêm mới</a>
-        </div>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Người sở hữu</th>
-                    <th>Thao tác</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="p : ${products.content}">
-                    <td th:text="${p.id}"></td>
-                    <td>
-                        <img class="thumb" th:if="${p.imageUrl != null}" th:src="@{${p.imageUrl}}" th:alt="${p.name}">
-                        <span th:unless="${p.imageUrl != null}">Chưa có ảnh</span>
-                    </td>
-                    <td th:text="${p.name}"></td>
-                    <td th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 2, 'POINT')}"></td>
-                    <td th:text="${p.username}"></td>
-                    <td>
-                        <div class="actions">
-                            <a th:href="@{/products/edit/{id}(id=${p.id})}">Sửa</a>
-                            <form th:action="@{/products/delete/{id}(id=${p.id})}" method="post"
-                                  onsubmit="return confirm('Xóa sản phẩm này?')">
-                                <button class="danger-link" type="submit">Xóa</button>
-                            </form>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{layouts/layout :: head('Quản lý sản phẩm')}">
+    </head>
+    <body>
+        <div th:replace="~{layouts/layout :: page(~{::section})}">
+            <section>
+                <div class="page-heading">
+                    <div>
+                        <p class="eyebrow">
+                            DANH MỤC CỦA BẠN
+                        </p>
+                        <h1>
+                            Quản lý sản phẩm
+                        </h1>
+                        <p class="muted" sec:authorize="hasRole('ADMIN')">
+                            Theo dõi và cập nhật sản phẩm của toàn bộ người dùng.
+                        </p>
+                        <p class="muted" sec:authorize="!hasRole('ADMIN')">
+                            Danh sách sản phẩm thuộc tài khoản của bạn.
+                        </p>
+                    </div>
+                    <a class="button" th:href="@{/products/create}">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Thêm sản phẩm
+                    </a>
+                </div>
+                <div class="table-card">
+                    <div class="toolbar">
+                        <form class="filter-form" th:action="@{/products}" method="get">
+                            <div class="field search-field">
+                                <label for="keyword">
+                                    Tìm sản phẩm
+                                </label>
+                                <div class="search-wrap">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="10.5" cy="10.5" r="6.5"/>
+                                        <path d="m16 16 5 5"/>
+                                    </svg>
+                                    <input id="keyword" name="keyword" type="search" th:value="${keyword}" placeholder="Tên sản phẩm hoặc mô tả…" maxlength="200">
+                                </div>
+                            </div>
+                            <div class="field size-field">
+                                <label for="size">
+                                    Dòng / trang
+                                </label>
+                                <select id="size" name="size">
+                                    <option th:if="${size != 5 and size != 10 and size != 20 and size != 50}" th:value="${size}" th:text="${size}" selected>
+                                    </option>
+                                    <option th:each="n : ${ {5,10,20,50} }" th:value="${n}" th:text="${n}" th:selected="${n == size}">
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit">
+                                Tìm kiếm
+                            </button>
+                            <a class="button secondary" th:if="${keyword != null and !keyword.isBlank()}" th:href="@{/products}">
+                                Xóa lọc
+                            </a>
+                        </form>
+                    </div>
+                    <div class="table-wrap" th:unless="${products.empty}" role="region" aria-label="Danh sách sản phẩm, cuộn ngang trên màn hình nhỏ" tabindex="0">
+                        <table>
+                            <caption class="sr-only">
+                                Danh sách sản phẩm
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Sản phẩm
+                                    </th>
+                                    <th scope="col">
+                                        Giá (₫)
+                                    </th>
+                                    <th scope="col">
+                                        Người sở hữu
+                                    </th>
+                                    <th scope="col">
+                                        Thao tác
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${products.content}">
+                                    <td>
+                                        <div class="product-cell">
+                                            <img class="thumb" th:if="${p.imageUrl != null}" th:src="@{${p.imageUrl}}" th:alt="${p.name}" loading="lazy">
+                                            <span class="thumb-placeholder" th:unless="${p.imageUrl != null}" aria-label="Chưa có ảnh">
+                                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <rect x="3" y="3" width="18" height="18" rx="3"/>
+                                                    <circle cx="8" cy="8" r="1"/>
+                                                    <path d="m3 17 6-6 4 4 3-3 5 5"/>
+                                                </svg>
+                                            </span>
+                                            <div>
+                                                <span class="row-title" th:text="${p.name}">
+                                                </span>
+                                                <span class="row-subtitle" th:text="|Mã sản phẩm #${p.id}|">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="price" th:text="${#numbers.formatDecimal(p.price, 1, 'POINT', 2, 'COMMA')}">
+                                    </td>
+                                    <td th:text="${p.username}">
+                                    </td>
+                                    <td>
+                                        <div class="actions">
+                                            <a th:href="@{/products/edit/{id}(id=${p.id})}" th:attr="aria-label=|Sửa ${p.name}|">
+                                                Sửa
+                                            </a>
+                                            <form method="post" th:action="@{/products/delete/{id}(id=${p.id})}" th:attr="data-confirm=|Xóa sản phẩm “${p.name}”? Sản phẩm và ảnh của nó sẽ được xóa. Hành động này không thể hoàn tác.|" onsubmit="return window.iotstarConfirm ? window.iotstarConfirm(this, event) : confirm(this.dataset.confirm)">
+                                                <button type="submit" class="danger-link" th:attr="aria-label=|Xóa ${p.name}|">
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" th:if="${products.empty}">
+                        <div class="empty-icon">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="10.5" cy="10.5" r="6.5"/>
+                                <path d="m16 16 5 5"/>
+                            </svg>
                         </div>
-                    </td>
-                </tr>
-                <tr th:if="${products.empty}">
-                    <td colspan="6">Không có dữ liệu.</td>
-                </tr>
-                </tbody>
-            </table>
+                        <h2 th:text="${keyword != null and !keyword.isBlank()} ? 'Không tìm thấy kết quả' : 'Chưa có sản phẩm'">
+                        </h2>
+                        <p th:text="${keyword != null and !keyword.isBlank()} ? 'Thử từ khóa khác hoặc xóa bộ lọc để xem toàn bộ danh sách.' : 'Thêm sản phẩm đầu tiên để bắt đầu quản lý tại đây.'">
+                        </p>
+                        <a class="button secondary" th:if="${keyword != null and !keyword.isBlank()}" th:href="@{/products}">
+                            Xóa bộ lọc
+                        </a>
+                        <a class="button" th:unless="${keyword != null and !keyword.isBlank()}" th:href="@{/products/create}">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            Thêm sản phẩm
+                        </a>
+                    </div>
+                    <div class="table-footer">
+                        <p class="note" th:text="${products.empty} ? '0 kết quả' : |Hiển thị ${products.number * products.size + 1}–${products.number * products.size + products.numberOfElements} trong ${products.totalElements} kết quả|">
+                        </p>
+                        <nav class="pagination" aria-label="Phân trang" th:with="start=${T(java.lang.Math).max(0, products.number - 2)},end=${T(java.lang.Math).min(products.totalPages - 1, products.number + 2)}">
+                            <a th:if="${products.hasPrevious()}" th:href="@{/products(page=${products.number - 1},size=${size},keyword=${keyword})}" aria-label="Trang trước">
+                                Trước
+                            </a>
+                            <span class="disabled" th:unless="${products.hasPrevious()}">
+                                Trước
+                            </span>
+                            <th:block th:if="${products.totalPages > 0}">
+                                <a th:if="${start > 0}" th:href="@{/products(page=${0},size=${size},keyword=${keyword})}" aria-label="Trang 1">
+                                    1
+                                </a>
+                                <span class="ellipsis" th:if="${start > 1}" aria-hidden="true">
+                                    …
+                                </span>
+                                <a th:each="i : ${#numbers.sequence(start,end)}" th:href="@{/products(page=${i},size=${size},keyword=${keyword})}" th:classappend="${i == products.number} ? 'active'" th:attr="aria-current=${i == products.number ? 'page' : null},aria-label=|Trang ${i + 1}|" th:text="${i + 1}">
+                                </a>
+                                <span class="ellipsis" th:if="${end < products.totalPages - 2}" aria-hidden="true">
+                                    …
+                                </span>
+                                <a th:if="${end < products.totalPages - 1}" th:href="@{/products(page=${products.totalPages - 1},size=${size},keyword=${keyword})}" th:text="${products.totalPages}" th:attr="aria-label=|Trang ${products.totalPages}|">
+                                </a>
+                            </th:block>
+                            <a th:if="${products.hasNext()}" th:href="@{/products(page=${products.number + 1},size=${size},keyword=${keyword})}" aria-label="Trang sau">
+                                Sau
+                            </a>
+                            <span class="disabled" th:unless="${products.hasNext()}">
+                                Sau
+                            </span>
+                        </nav>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <!-- Phân trang, giữ nguyên từ khóa và số dòng -->
-        <div class="pagination">
-            <a th:if="${products.hasPrevious()}"
-               th:href="@{/products(page=${products.number - 1}, size=${size}, keyword=${keyword})}">Trước</a>
-            <th:block th:if="${products.totalPages > 0}">
-                <a th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}"
-                   th:href="@{/products(page=${i}, size=${size}, keyword=${keyword})}"
-                   th:classappend="${i == products.number} ? 'active'"
-                   th:text="${i + 1}"></a>
-            </th:block>
-            <a th:if="${products.hasNext()}"
-               th:href="@{/products(page=${products.number + 1}, size=${size}, keyword=${keyword})}">Sau</a>
-        </div>
-        <p class="note" th:text="|Tổng: ${products.totalElements} bản ghi|"></p>
-    </section>
-</div>
-</body>
+    </body>
 </html>

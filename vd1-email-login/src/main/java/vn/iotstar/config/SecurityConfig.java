@@ -29,7 +29,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/css/**", "/images/**", "/error", "/access-denied").permitAll()
+                .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/error", "/access-denied").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             // POST /login do Spring Security xử lý, ô nhập tài khoản tên là "email"
