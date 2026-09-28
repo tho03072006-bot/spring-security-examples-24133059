@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#176b52">
+        <meta name="theme-color" content="#6554e8">
         <link rel="stylesheet" th:href="@{/css/app.css}">
         <script defer th:src="@{/js/app.js}">
         </script>
@@ -11,7 +11,7 @@
             IOTSTAR SHOP
         </title>
     </head>
-    <body>
+    <body class="app-shell" th:classappend="${#authorization.expression('isAuthenticated()')} ? 'signed-in' : 'guest'">
         <a class="skip-link" href="#main-content">
             Đến nội dung chính
         </a>

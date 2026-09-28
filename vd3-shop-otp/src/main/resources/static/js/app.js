@@ -23,6 +23,8 @@
       link.setAttribute('aria-current', 'page');
     }
   });
+  const pageTitle = document.querySelector('[data-page-title]');
+  if (pageTitle) pageTitle.textContent = document.title.split(' | ')[0];
   const summary = document.querySelector('.error-summary');
   if (summary) summary.focus();
   document.querySelectorAll('[data-character-count]').forEach(input => {

@@ -94,7 +94,7 @@ Ví dụ 3 lưu thư tại **`vd3-shop-otp/data/mailbox/<email>.txt`** khi chạ
 
 ## Giao diện mới
 
-Giao diện xanh lục và nền sáng được áp dụng đồng bộ cho ba ví dụ, với bố cục thích ứng máy tính/điện thoại. Form có hiện/ẩn mật khẩu, hướng dẫn OTP, thông báo lỗi bằng tiếng Việt và trạng thái đang xử lý. Màn hình quản lý có tìm kiếm, phân trang gọn, trạng thái trống, xem trước ảnh và xác nhận xóa có tên bản ghi.
+Giao diện mới có sidebar tím than, nền sáng, điểm nhấn tím và minh họa SVG riêng, đồng bộ cho ba ví dụ. Dashboard hiển thị số liệu thực tế và lối tắt quản lý; trang đăng nhập dùng bố cục hai phần, chuyển thành một cột trên điện thoại. Form có hiện/ẩn mật khẩu, hướng dẫn OTP, thông báo lỗi bằng tiếng Việt và trạng thái đang xử lý. Màn hình quản lý có tìm kiếm, phân trang gọn, trạng thái trống, xem trước ảnh và xác nhận xóa có tên bản ghi.
 
 Xem [nguồn tham khảo, thay đổi UX và ảnh minh chứng](docs/GIAO_DIEN_UX.md).
 

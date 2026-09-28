@@ -1,11 +1,13 @@
 # Giao diện và trải nghiệm sử dụng
 
-Giao diện được nâng cấp đồng bộ cho ba ví dụ ngày 28/09/2026. Tông xanh lục, nền sáng và các vùng nội dung rõ ràng giúp người dùng nhận biết thao tác chính. Font hệ thống, CSS, JavaScript và icon SVG đều nằm trong project, không cần CDN.
+Giao diện được thiết kế lại đồng bộ cho ba ví dụ ngày 28/09/2026: sidebar tím than, nền sáng và màu tím cho thao tác chính. Dashboard có vùng giới thiệu nổi bật, thẻ số liệu thực tế và lối tắt quản lý; trang đăng nhập có bố cục hai phần với minh họa sản phẩm SVG thiết kế riêng. Font hệ thống, CSS, JavaScript, icon và minh họa đều nằm trong project, không cần CDN.
 
 ## Nguồn tham khảo và cách áp dụng
 
 | Nguồn | Áp dụng trong bài |
 |---|---|
+| [Atlassian Design: Spacing](https://atlassian.design/foundations/spacing) | Tham khảo nhịp khoảng cách và nhóm nội dung để phân biệt điều hướng, số liệu và thao tác. |
+| [Atlassian Design: Navigation layout](https://atlassian.design/components/navigation-system/layout/code) | Tham khảo cấu trúc sidebar, thanh phía trên và vùng nội dung; trên điện thoại chuyển thành điều hướng ngang gọn. |
 | [GOV.UK: Password input](https://design-system.service.gov.uk/components/password-input/) | Nút hiện/ẩn mật khẩu có nhãn truy cập, không chặn dán, hỗ trợ trình quản lý mật khẩu; chỉ hiện nút khi JavaScript hoạt động. |
 | [GOV.UK: Pagination](https://design-system.service.gov.uk/components/pagination/) | Trang hiện tại có `aria-current`, nút trước/sau, cửa sổ số trang và dấu ba chấm; giữ từ khóa và số dòng khi chuyển trang. |
 | [W3C WAI: Labeling controls](https://www.w3.org/WAI/tutorials/forms/labels/) | Nhãn luôn hiển thị và liên kết với trường nhập; gợi ý và lỗi liên kết qua `aria-describedby`. |
@@ -15,7 +17,9 @@ Các nguồn được dùng để tham khảo hành vi và khả năng truy cậ
 
 ## Những thay đổi chính
 
-- Điều hướng rõ ràng theo quyền truy cập; mục hiện tại được đánh dấu. Header hiển thị thông tin principal và nút đăng xuất.
+- Sidebar có icon, mục hiện tại được đánh dấu, thông tin principal và nút đăng xuất; thanh phía trên hiển thị tên màn hình hiện tại. Trên điện thoại, điều hướng chuyển thành các mục ngang dễ chạm.
+- Minh họa SVG riêng dùng chung trên landing, dashboard và trang xác thực. Các thẻ thống kê chỉ hiển thị dữ liệu thật; họa tiết trang trí không mô phỏng biểu đồ tăng trưởng.
+- Nhãn và nội dung phụ dùng cỡ chữ từ 12 px; trường nhập trên điện thoại dùng 16 px. Tăng độ tương phản của nội dung hướng dẫn để dễ đọc.
 - Đăng nhập có hiện/ẩn mật khẩu, autocomplete và thông báo trạng thái. Tài khoản mẫu nằm trong phần có thể mở rộng.
 - Đăng ký có tiến trình ba bước. OTP dùng một ô 6 chữ số, bàn phím số, autocomplete, hướng dẫn hạn dùng và gửi lại.
 - Dashboard có số liệu thực tế, nút thêm sản phẩm và lối tắt quản lý. Tài khoản thành viên thấy sản phẩm của mình; quản trị viên thấy số liệu toàn hệ thống.

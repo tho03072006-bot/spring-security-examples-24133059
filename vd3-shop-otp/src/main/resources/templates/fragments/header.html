@@ -2,37 +2,88 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <body>
         <header class="site-header" th:fragment="header">
-            <div class="header-inner">
+            <aside class="sidebar" sec:authorize="isAuthenticated()">
                 <a class="brand" th:href="@{/}" aria-label="IOTSTAR SHOP — trang chủ">
                     <span class="brand-mark">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M6 7h12l2 13H4L6 7Z"/>
-                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            <path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/>
+                            <path d="m3 8 9 5 9-5M12 13v8M7 5.8l9 5"/>
                         </svg>
                     </span>
-                    IOTSTAR SHOP
+                    <span>
+                        IOTSTAR SHOP
+                        <small>
+                            WORKSPACE
+                        </small>
+                    </span>
                 </a>
-                <nav class="site-nav" aria-label="Điều hướng chính">
-                    <a th:href="@{/}">
-                        Tổng quan
+                <div class="sidebar-menu">
+                    <p class="nav-label">
+                        KHÔNG GIAN LÀM VIỆC
+                    </p>
+                    <nav class="site-nav" aria-label="Điều hướng chính">
+                        <a th:href="@{/}">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="7" height="7" rx="2"/>
+                                <rect x="14" y="3" width="7" height="7" rx="2"/>
+                                <rect x="3" y="14" width="7" height="7" rx="2"/>
+                                <rect x="14" y="14" width="7" height="7" rx="2"/>
+                            </svg>
+                            <span>
+                                Tổng quan
+                            </span>
+                        </a>
+                        <a th:href="@{/products}">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M6 7h12l2 13H4L6 7Z"/>
+                                <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            </svg>
+                            <span>
+                                Sản phẩm
+                            </span>
+                        </a>
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/users}">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="9" cy="7" r="3"/>
+                                <path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/>
+                            </svg>
+                            <span>
+                                Người dùng
+                            </span>
+                        </a>
+                    </nav>
+                </div>
+                <div class="sidebar-tip">
+                    <span class="tip-symbol">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>
+                        </svg>
+                    </span>
+                    <strong>
+                        Bắt đầu với một ý tưởng
+                    </strong>
+                    <p>
+                        Thêm sản phẩm và xây dựng danh mục của riêng bạn.
+                    </p>
+                    <a th:href="@{/products/create}">
+                        Thêm sản phẩm
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12h16m-6-6 6 6-6 6"/>
+                        </svg>
                     </a>
-                    <a sec:authorize="isAuthenticated()" th:href="@{/products}">
-                        Sản phẩm
-                    </a>
-                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/users}">
-                        Người dùng
-                    </a>
-                </nav>
-                <div class="account" sec:authorize="isAuthenticated()" th:with="me=${#authentication.principal}">
-                    <img class="avatar" th:src="@{${me.images ?: '/images/avatar.svg'}}" alt="Ảnh đại diện">
-                    <div class="account-info">
-                        <span class="account-name" th:text="${me.fullName}" th:title="${me.fullName}">
-                        </span>
-                        <span class="account-email" th:text="${me.email}" th:title="|${me.email} · ${me.username} · ${me.role}|">
-                        </span>
+                </div>
+                <div class="account" th:with="me=${#authentication.principal}">
+                    <div class="account-person">
+                        <img class="avatar" th:src="@{${me.images ?: '/images/avatar.svg'}}" alt="Ảnh đại diện">
+                        <div class="account-info">
+                            <span class="account-name" th:text="${me.fullName}" th:title="${me.fullName}">
+                            </span>
+                            <span class="account-email" th:text="${me.email}" th:title="|${me.email} · ${me.username} · ${me.role}|">
+                            </span>
+                        </div>
                     </div>
                     <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="logout" aria-label="Đăng xuất" title="Đăng xuất">
+                        <button class="logout" type="submit" aria-label="Đăng xuất">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M9 4H4v16h5m6-12 4 4-4 4M9 12h10"/>
                             </svg>
@@ -42,14 +93,68 @@
                         </button>
                     </form>
                 </div>
-                <div class="header-login" sec:authorize="!isAuthenticated()">
-                    <a class="button small secondary" th:href="@{/login}">
-                        Đăng nhập
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M4 12h16m-6-6 6 6-6 6"/>
-                        </svg>
-                    </a>
+                <p class="sidebar-footer">
+                    IOTSTAR · 2026
+                </p>
+            </aside>
+            <div class="app-topbar" sec:authorize="isAuthenticated()">
+                <a class="mobile-brand" th:href="@{/}">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/>
+                        <path d="m3 8 9 5 9-5M12 13v8M7 5.8l9 5"/>
+                    </svg>
+                    <span>
+                        IOTSTAR SHOP
+                    </span>
+                </a>
+                <div class="topbar-location">
+                    <span class="topbar-workspace">
+                        Không gian quản lý
+                    </span>
+                    <span class="topbar-divider">
+                        /
+                    </span>
+                    <strong data-page-title>
+                        Tổng quan
+                    </strong>
                 </div>
+                <div class="topbar-state">
+                    <span class="status-dot">
+                    </span>
+                    Đã đăng nhập
+                    <span class="role-label" th:text="${#authentication.principal.role == 'ROLE_ADMIN'} ? 'Quản trị viên' : 'Thành viên'">
+                    </span>
+                </div>
+            </div>
+            <div class="guest-header" sec:authorize="!isAuthenticated()">
+                <a class="brand" th:href="@{/}" aria-label="IOTSTAR SHOP — trang chủ">
+                    <span class="brand-mark">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/>
+                            <path d="m3 8 9 5 9-5M12 13v8M7 5.8l9 5"/>
+                        </svg>
+                    </span>
+                    <span>
+                        IOTSTAR SHOP
+                        <small>
+                            WORKSPACE
+                        </small>
+                    </span>
+                </a>
+                <nav class="guest-nav" aria-label="Điều hướng chính">
+                    <a th:href="@{/}">
+                        Trang chủ
+                    </a>
+                    <a th:href="@{/login}">
+                        Đăng nhập
+                    </a>
+                </nav>
+                <a class="button" th:href="@{/register}">
+                    Bắt đầu ngay
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                    </svg>
+                </a>
             </div>
         </header>
     </body>

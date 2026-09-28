@@ -3,7 +3,7 @@
 Ngày kiểm tra: 28/09/2026.
 
 Lệnh: `mvn clean verify` với JDK 26.0.2.1, Maven 3.9.16.
-Kết quả: **BUILD SUCCESS**, 45 test, 0 failure, 0 error, 0 skipped. Lần build gần nhất hoàn tất lúc 13:44 ngày 28/09/2026.
+Kết quả: **BUILD SUCCESS**, 45 test, 0 failure, 0 error, 0 skipped. Lần build gần nhất hoàn tất lúc 14:09 ngày 28/09/2026.
 
 | Module | Test suite | Số test | Failure | Error |
 |---|---|---:|---:|---:|
@@ -21,7 +21,7 @@ Kết quả: **BUILD SUCCESS**, 45 test, 0 failure, 0 error, 0 skipped. Lần bu
 
 ## Kiểm tra giao diện nâng cấp
 
-Bản giao diện mới đã được kiểm tra trên các ứng dụng dùng SQL Server. Các thao tác hiện/ẩn mật khẩu, login/logout, tìm kiếm, phân trang, mở/hủy xác nhận xóa, xem trước/bỏ ảnh, đếm ký tự và focus khi validation lỗi đều đã được kiểm tra. Thử bố cục ở chiều rộng 320, 390 và 768 px; không tràn ngang trang ở các màn hình đã thử. Các thông báo validation được chuẩn hóa sang tiếng Việt.
+Bản giao diện mới với sidebar tím than, dashboard và minh họa SVG đã được kiểm tra trên các ứng dụng dùng SQL Server. Các thao tác hiện/ẩn mật khẩu, login/logout, tìm kiếm, phân trang, mở/hủy xác nhận xóa, xem trước/bỏ ảnh, đếm ký tự và focus khi validation lỗi đều đã được kiểm tra. Thử bố cục ở chiều rộng 320, 390 và 768 px; không tràn ngang trang ở các màn hình đã thử. Các thông báo validation được chuẩn hóa sang tiếng Việt.
 
 Ba test mới kiểm tra JavaScript của trang login tải được khi chưa đăng nhập. Xem [nguồn tham khảo và ảnh giao diện mới](GIAO_DIEN_UX.md). Không gửi thêm email OTP trong đợt kiểm tra giao diện này.
 
