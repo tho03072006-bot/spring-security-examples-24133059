@@ -1,0 +1,15 @@
+**/target/
+**/data/
+**/uploads/
+**/.env
+.env
+**/.env.*
+!**/.env.example
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.log
+
+.runtime/

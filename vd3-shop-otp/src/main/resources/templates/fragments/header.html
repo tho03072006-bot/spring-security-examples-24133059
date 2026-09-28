@@ -1,0 +1,9 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><body>
+<header th:fragment="header"><a class="brand" th:href="@{/}">IOTSTAR SHOP</a>
+  <nav><a th:href="@{/}">Trang chủ</a><a th:if="${signedIn}" th:href="@{/dashboard}">Dashboard</a>
+    <a th:if="${shop and signedIn}" th:href="@{/products}">Sản phẩm</a><a th:if="${shop and admin}" th:href="@{/users}">Người dùng</a></nav>
+  <div class="account" th:if="${signedIn}"><img class="avatar" th:src="${currentUser.images != null ? currentUser.images : '/images/avatar.svg'}" alt="Ảnh đại diện">
+    <div><span th:text="${currentUser.fullName}"></span><span class="muted" th:text="${currentUser.email + ' · ' + currentUser.role}"></span></div>
+    <form th:action="@{/logout}" method="post"><button class="link-button" type="submit">Đăng xuất</button></form></div>
+  <a th:unless="${signedIn}" th:href="@{/login}">Đăng nhập</a>
+</header></body></html>

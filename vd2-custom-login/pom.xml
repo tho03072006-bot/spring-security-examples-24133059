@@ -1,0 +1,4 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion><parent><groupId>vn.iotstar</groupId><artifactId>baitap-spring-security</artifactId><version>1.0.0</version></parent>
+    <artifactId>vd2-custom-login</artifactId><name>Ví dụ 2</name><dependencies><dependency><groupId>nz.net.ultraq.thymeleaf</groupId><artifactId>thymeleaf-layout-dialect</artifactId><version>4.0.1</version></dependency></dependencies>
+    <build><plugins><plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId><configuration><excludes><exclude><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId></exclude></excludes></configuration></plugin></plugins></build></project>
