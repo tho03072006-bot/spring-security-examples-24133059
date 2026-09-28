@@ -15,11 +15,22 @@ Giao diện được thiết kế lại đồng bộ cho ba ví dụ ngày 28/09
 
 Các nguồn được dùng để tham khảo hành vi và khả năng truy cập. Bố cục, màu sắc và đồ họa của giao diện được thiết kế riêng cho bài.
 
+## Đối chiếu yêu cầu về giao diện
+
+Trong các tài liệu được cung cấp không thấy yêu cầu giao diện phải giống hệt hình hoặc CSS mẫu. Việc thiết kế lại được hiểu là thay phần trình bày, đồng thời giữ các yêu cầu chức năng và kỹ thuật:
+
+- `vd1.pdf`, trang 1: login với User/Role, thông tin user ở `header.html`, Spring Boot 4, Spring Security, MapStruct, Thymeleaf và layout không dùng Dialect. Module ví dụ 1 tiếp tục dùng fragments.
+- `vd2.pdf`, trang 1: custom login bằng username hoặc email, fullname và images ở `header.html`. Module ví dụ 2 giữ cách ghép trang bằng Layout Dialect như mã mẫu.
+- `vd3.pdf`, trang 1–3: các luồng đăng ký/OTP, login/session, reset password, CRUD/search/pagination/count, quan hệ User–Product và Cloudinary; view Thymeleaf, SQL Server và các công nghệ đã chỉ định.
+
+Đây là cách đối chiếu từ tài liệu đã gửi, không phải một quy định cho phép thay đổi các yêu cầu kỹ thuật. Mẫu hiện tại vẫn dùng các template Thymeleaf của từng ví dụ, với CSS và đồ họa riêng.
+
 ## Những thay đổi chính
 
 - Sidebar có icon, mục hiện tại được đánh dấu, thông tin principal và nút đăng xuất; thanh phía trên hiển thị tên màn hình hiện tại. Trên điện thoại, điều hướng chuyển thành các mục ngang dễ chạm.
 - Minh họa SVG riêng dùng chung trên landing, dashboard và trang xác thực. Các thẻ thống kê chỉ hiển thị dữ liệu thật; họa tiết trang trí không mô phỏng biểu đồ tăng trưởng.
 - Nhãn và nội dung phụ dùng cỡ chữ từ 12 px; trường nhập trên điện thoại dùng 16 px. Tăng độ tương phản của nội dung hướng dẫn để dễ đọc.
+- Đợt trau chuốt tiếp theo giữ nguyên bố cục tím: tăng độ rõ của nhãn/bảng, làm mềm bóng thẻ, thêm nền cho liên kết chính trong banner và đồng bộ ảnh đại diện mẫu với màu của ứng dụng. Hiệu ứng hover ngắn và tiếp tục tắt khi người dùng yêu cầu giảm chuyển động.
 - Đăng nhập có hiện/ẩn mật khẩu, autocomplete và thông báo trạng thái. Tài khoản mẫu nằm trong phần có thể mở rộng.
 - Đăng ký có tiến trình ba bước. OTP dùng một ô 6 chữ số, bàn phím số, autocomplete, hướng dẫn hạn dùng và gửi lại.
 - Dashboard có số liệu thực tế, nút thêm sản phẩm và lối tắt quản lý. Tài khoản thành viên thấy sản phẩm của mình; quản trị viên thấy số liệu toàn hệ thống.
