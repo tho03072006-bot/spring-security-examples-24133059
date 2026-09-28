@@ -76,6 +76,7 @@ Họ tên, tên và mô tả sản phẩm dùng cột Unicode để lưu tiếng
 SMTP Gmail cần app password của tài khoản đã bật xác minh hai bước. Điền `MAIL_USERNAME` và `MAIL_PASSWORD` của bạn; không dùng giá trị minh họa trong PDF.
 Cloudinary cần `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` lấy từ tài khoản của bạn.
 Ảnh được upload bằng SDK, lưu riêng URL và public ID; sửa ảnh mới sẽ xóa ảnh cũ, xóa sản phẩm sẽ xóa ảnh trên cloud.
+Cloudinary thật đã được kiểm tra riêng qua service: upload, truy cập ảnh HTTPS, thay ảnh và xóa ảnh đều thành công. Xem phạm vi xác minh trong `docs/KET_QUA_KIEM_THU.md`; cấu hình riêng lưu trong `.env` local.
 
 ## Kiểm tra OTP trong chế độ demo
 

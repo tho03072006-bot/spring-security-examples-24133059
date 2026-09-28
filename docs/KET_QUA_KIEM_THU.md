@@ -27,5 +27,11 @@ Kết quả: **BUILD SUCCESS**, 41 test, 0 failure, 0 error, 0 skipped.
 ## Phạm vi xác minh
 
 Test dùng H2 in-memory; demo dùng H2 lưu file, thư OTP local và ảnh local.
-Profile SQL Server, Spring Mail SMTP và Cloudinary SDK đã được triển khai riêng theo đề. Chưa xác minh kết nối dịch vụ thật: các SQL Server service đang dừng, tài khoản thực thi không có quyền khởi động service; chưa được cung cấp thông số DB/SMTP/Cloudinary của người dùng.
+Profile SQL Server, Spring Mail SMTP và Cloudinary SDK đã được triển khai riêng theo đề.
+
+- **Cloudinary thật: đã xác minh.** Gọi trực tiếp `CloudinaryServiceImpl` đã build cùng Cloudinary SDK của ví dụ 3: upload PNG hợp lệ, đọc URL HTTPS và giải mã ảnh thành công; upload ảnh thay thế, xóa ảnh cũ, xóa ảnh mới. Kiểm tra lại bằng SDK xác nhận cả hai ảnh không còn tồn tại. Tất cả ảnh thử đã được dọn sạch. Đây là kiểm tra service ảnh độc lập, chưa phải luồng CRUD qua giao diện kết hợp SQL Server.
+- **SQL Server:** instance `SQLEXPRESS` đang chạy, TCP cổng 1433 đã bật. Đã kết nối và chạy truy vấn chỉ đọc bằng Windows Authentication tại `localhost:1433`; ba database `security_vd1`, `security_vd2`, `security_vd3` chưa tồn tại. Ứng dụng hiện cấu hình SQL login; cần cung cấp tài khoản DB hoặc điều chỉnh sang Windows Authentication để xác minh chạy ứng dụng với SQL Server.
+- **SMTP:** chưa được cung cấp tài khoản gửi mail; chưa xác minh OTP tới hộp thư thật.
+
+Thông tin Cloudinary do người dùng cung cấp chỉ lưu trong `.env` local, không đưa lên Git. Bộ 41 test tự động vẫn dùng H2 và dịch vụ mail/ảnh local; kiểm tra Cloudinary thật được thực hiện riêng.
 Không sử dụng các secret minh họa trong PDF.
