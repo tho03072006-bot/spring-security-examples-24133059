@@ -24,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
     private final UserRepository userRepository;
     private final ProductMapper productMapper;
     private final CloudinaryService imageService;
+    private final ImageCleanup imageCleanup;
     private final CurrentAccount currentAccount;
 
     // Admin thấy mọi sản phẩm; user chỉ thấy sản phẩm của mình
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void delete(Long id) {
         Product product = requireOwnedProduct(id);
-        imageService.delete(product.getImagePublicId());
+        imageCleanup.afterCommit(product.getImagePublicId());
         productRepository.delete(product);
     }
 
@@ -88,19 +89,15 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    // Upload ảnh mới rồi mới xóa ảnh cũ; nếu xóa ảnh cũ lỗi thì gỡ ảnh vừa upload
+    // Giữ ảnh cũ tới khi commit; nếu rollback thì chỉ gỡ ảnh mới vừa upload.
     private void replaceImage(Product product, MultipartFile image) {
         if (image == null || image.isEmpty()) {
             return;
         }
         String oldPublicId = product.getImagePublicId();
         var uploaded = imageService.upload(image);
-        try {
-            imageService.delete(oldPublicId);
-        } catch (RuntimeException e) {
-            imageService.delete(uploaded.publicId());
-            throw e;
-        }
+        imageCleanup.afterRollback(uploaded.publicId());
+        imageCleanup.afterCommit(oldPublicId);
         product.setImageUrl(uploaded.url());
         product.setImagePublicId(uploaded.publicId());
     }

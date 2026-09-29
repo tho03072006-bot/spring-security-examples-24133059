@@ -1,5 +1,6 @@
 package vn.iotstar.service.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final OtpService otpService;
+    private final AccountSessionService accountSessions;
 
     @Override
     @Transactional
@@ -52,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public boolean verifyRegister(String email, String otp) {
-        var user = userRepository.findByEmailIgnoreCase(email.trim()).orElse(null);
+        var user = userRepository.findLockedByEmailIgnoreCase(email.trim()).orElse(null);
         if (user == null || user.isEnabled() || !otpService.verifyRegisterOtp(email, otp)) {
             return false;
         }
@@ -63,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void resendRegisterOtp(String email) {
-        var user = userRepository.findByEmailIgnoreCase(email.trim())
+        var user = userRepository.findLockedByEmailIgnoreCase(email.trim())
                 .orElseThrow(() -> new IllegalArgumentException("Tài khoản không tồn tại."));
         if (user.isEnabled()) {
             throw new IllegalArgumentException("Tài khoản đã được kích hoạt.");
@@ -74,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void forgotPassword(String email) {
-        var user = userRepository.findByEmailIgnoreCase(email.trim())
+        var user = userRepository.findLockedByEmailIgnoreCase(email.trim())
                 .orElseThrow(() -> new IllegalArgumentException("Email không tồn tại."));
         if (!user.isEnabled()) {
             throw new IllegalArgumentException("Tài khoản chưa được kích hoạt.");
@@ -86,15 +88,22 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public boolean resetPassword(ResetPasswordDTO dto) {
         requireMatchingPasswords(dto.getPassword(), dto.getConfirmPassword());
-        var user = userRepository.findByEmailIgnoreCase(dto.getEmail().trim()).orElse(null);
+        var user = userRepository.findLockedByEmailIgnoreCase(dto.getEmail().trim()).orElse(null);
         if (user == null || !user.isEnabled() || !otpService.verifyResetPasswordOtp(dto.getEmail(), dto.getOtp())) {
             return false;
         }
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        accountSessions.expireAfterCommit(user.getId());
         return true;
     }
 
     private static void requireMatchingPasswords(String password, String confirmPassword) {
+        if (password == null || password.isBlank() || password.length() < 6) {
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự.");
+        }
+        if (password.getBytes(StandardCharsets.UTF_8).length > 72) {
+            throw new IllegalArgumentException("Mật khẩu quá dài khi chứa ký tự có dấu hoặc biểu tượng. Hãy rút ngắn mật khẩu.");
+        }
         if (!password.equals(confirmPassword)) {
             throw new IllegalArgumentException("Mật khẩu xác nhận không khớp.");
         }

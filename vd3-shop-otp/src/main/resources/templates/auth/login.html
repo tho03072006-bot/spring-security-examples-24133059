@@ -57,7 +57,7 @@
                             Bạn đã đăng xuất thành công.
                         </div>
                         <div class="alert error" role="alert" th:if="${param.expired}">
-                            Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.
+                            Phiên đăng nhập đã hết hạn hoặc thông tin tài khoản đã thay đổi. Vui lòng đăng nhập lại.
                         </div>
                         <form th:action="@{/login}" method="post">
                             <div class="field">

@@ -1,10 +1,12 @@
 package vn.iotstar.repository;
 
+import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import vn.iotstar.entity.User;
@@ -16,6 +18,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph(attributePaths = "role")
     Optional<User> findByEmailIgnoreCase(String email);
+
+    // Khóa tài khoản tồn tại ổn định, kể cả trước khi OTP đầu tiên được tạo.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<User> findLockedByEmailIgnoreCase(String email);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<User> findLockedById(Long id);
 
     boolean existsByUsernameIgnoreCase(String username);
 

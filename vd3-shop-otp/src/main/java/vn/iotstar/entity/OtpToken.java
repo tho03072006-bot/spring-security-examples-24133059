@@ -34,7 +34,7 @@ public class OtpToken {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Số lần nhập sai
+    // Số lần đã thử xác thực
     private int attempts;
 
     private boolean used;

@@ -16,7 +16,6 @@ import vn.iotstar.repository.OtpTokenRepository;
 import vn.iotstar.repository.ProductRepository;
 import vn.iotstar.repository.RoleRepository;
 import vn.iotstar.repository.UserRepository;
-import vn.iotstar.service.CloudinaryService;
 import vn.iotstar.service.UserService;
 
 @Service
@@ -30,7 +29,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final ProductRepository productRepository;
     private final OtpTokenRepository otpTokenRepository;
-    private final CloudinaryService imageService;
+    private final ImageCleanup imageCleanup;
+    private final AccountSessionService accountSessions;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final CurrentAccount currentAccount;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public UserDTO update(Long id, UserDTO dto) {
-        User user = requireUser(id);
+        User user = requireUserForUpdate(id);
         normalizeAndCheckUnique(dto, id);
 
         boolean keepsAdmin = dto.isEnabled() && ADMIN.equals(dto.getRoleName());
@@ -81,6 +81,15 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Không thể tự khóa hoặc hạ quyền tài khoản đang đăng nhập.");
         }
 
+        boolean credentialsChanged = !user.getUsername().equals(dto.getUsername())
+                || !user.getEmail().equals(dto.getEmail())
+                || !user.getRole().getName().equals(dto.getRoleName())
+                || user.isEnabled() != dto.isEnabled();
+        if (credentialsChanged) {
+            // OTP gửi tới địa chỉ cũ không được áp dụng cho tài khoản khác dùng lại email đó.
+            otpTokenRepository.deleteByEmail(user.getEmail());
+            accountSessions.expireAfterCommit(id);
+        }
         userMapper.update(dto, user);
         user.setRole(roleRepository.findByName(dto.getRoleName()).orElseThrow());
         return toDTO(user);
@@ -91,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public void delete(Long id) {
-        User user = requireUser(id);
+        User user = requireUserForUpdate(id);
         if (id.equals(currentAccount.get().getId())) {
             throw new IllegalArgumentException("Không thể xóa tài khoản đang đăng nhập.");
         }
@@ -100,10 +109,11 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Không thể xóa quản trị viên cuối cùng.");
         }
         for (var product : productRepository.findByUserId(id)) {
-            imageService.delete(product.getImagePublicId());
+            imageCleanup.afterCommit(product.getImagePublicId());
         }
         otpTokenRepository.deleteByEmail(user.getEmail());
         userRepository.delete(user);
+        accountSessions.expireAfterCommit(id);
     }
 
     @Override
@@ -120,6 +130,11 @@ public class UserServiceImpl implements UserService {
 
     private User requireUser(Long id) {
         return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User không tồn tại."));
+    }
+
+    private User requireUserForUpdate(Long id) {
+        return userRepository.findLockedById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User không tồn tại."));
     }
 

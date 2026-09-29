@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.iotstar.entity.OtpToken;
 import vn.iotstar.repository.OtpTokenRepository;
+import vn.iotstar.repository.UserRepository;
 import vn.iotstar.service.EmailService;
 import vn.iotstar.service.OtpService;
 
@@ -24,6 +25,7 @@ public class OtpServiceImpl implements OtpService {
     private static final int RESEND_SECONDS = 60;
 
     private final OtpTokenRepository otpTokenRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final SecureRandom random = new SecureRandom();
@@ -54,6 +56,8 @@ public class OtpServiceImpl implements OtpService {
 
     private void send(String email, String type, String subject) {
         String address = email.trim().toLowerCase(Locale.ROOT);
+        userRepository.findLockedByEmailIgnoreCase(address)
+                .orElseThrow(() -> new IllegalArgumentException("Tài khoản không tồn tại."));
         var previous = otpTokenRepository.findTopByEmailAndTypeOrderByCreatedAtDescIdDesc(address, type).orElse(null);
         if (previous != null && previous.getCreatedAt().plusSeconds(RESEND_SECONDS).isAfter(LocalDateTime.now())) {
             throw new IllegalArgumentException("Vui lòng chờ 60 giây trước khi gửi lại OTP.");
@@ -76,6 +80,10 @@ public class OtpServiceImpl implements OtpService {
 
     private boolean verify(String email, String code, String type) {
         String address = email.trim().toLowerCase(Locale.ROOT);
+        // Thứ tự khóa luôn là User rồi OTP, tránh gửi lại và xác thực khóa chéo nhau.
+        if (userRepository.findLockedByEmailIgnoreCase(address).isEmpty()) {
+            return false;
+        }
         var token = otpTokenRepository.findTopByEmailAndTypeOrderByCreatedAtDescIdDesc(address, type).orElse(null);
         if (token == null
                 || token.isUsed()
