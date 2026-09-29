@@ -12,32 +12,29 @@
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>
                                 </svg>
-                                IOTSTAR WORKSPACE
+                                IOTSTAR SHOP
                             </span>
                             <h1>
                                 Chào bạn.
                                 <br>
                                 <span>
-                                    Bắt đầu khác biệt.
+                                    Mọi thứ đã sẵn sàng.
                                 </span>
                             </h1>
                             <p>
-                                Truy cập thông tin tài khoản trong một không gian mới: tinh gọn, rõ ràng và luôn sẵn sàng cho bạn.
+                                Đăng nhập và truy cập thông tin tài khoản trong một không gian tinh gọn, rõ ràng.
                             </p>
-                            <a class="button" th:href="@{/login}">
-                                Đăng nhập
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M4 12h16m-6-6 6 6-6 6"/>
-                                </svg>
-                            </a>
+                            <div class="welcome-actions">
+                                <a class="button" th:href="@{/login}">
+                                    Đăng nhập
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                         <div class="landing-art">
-                            <div class="auth-art" aria-hidden="true">
-                                <img class="workspace-visual" th:src="@{/images/workspace.svg}" alt="">
-                                <span class="art-caption">
-                                    YOUR SPACE. YOUR POSSIBILITIES.
-                                </span>
-                            </div>
+                            <img class="workspace-visual" th:src="@{/images/workspace.svg}" alt="" aria-hidden="true">
                         </div>
                     </div>
                 </div>
@@ -51,7 +48,7 @@
                                 Chào bạn.
                             </h1>
                             <p>
-                                Mọi thông tin của bạn, trong một không gian.
+                                Thông tin tài khoản của bạn, trong cùng một không gian.
                             </p>
                         </div>
                         <a class="button secondary" sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">
@@ -62,29 +59,19 @@
                             Trang quản trị
                         </a>
                     </div>
-                    <div class="dashboard-hero">
-                        <div class="hero-copy">
-                            <span class="hero-tag">
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>
-                                </svg>
-                                IOTSTAR WORKSPACE
-                            </span>
+                    <div class="account-welcome">
+                        <div>
+                            <p class="eyebrow">
+                                IOTSTAR SHOP
+                            </p>
                             <h2>
-                                Sẵn sàng cho
-                                <br>
-                                một khởi đầu
-                                <em>
-                                    mới.
-                                </em>
+                                Một khởi đầu thật gọn gàng.
                             </h2>
                             <p>
-                                Bạn đã đăng nhập thành công. Khám phá thông tin tài khoản của mình ở bên dưới.
+                                Bạn đã đăng nhập thành công. Xem thông tin tài khoản và quyền truy cập ở bên dưới.
                             </p>
                         </div>
-                        <div class="hero-art">
-                            <img th:src="@{/images/workspace.svg}" alt="" aria-hidden="true">
-                        </div>
+                        <img th:src="@{/images/workspace.svg}" alt="" aria-hidden="true">
                     </div>
                     <div class="panel profile-panel">
                         <img class="avatar" th:src="@{${me.images ?: '/images/avatar.svg'}}" alt="Ảnh đại diện">

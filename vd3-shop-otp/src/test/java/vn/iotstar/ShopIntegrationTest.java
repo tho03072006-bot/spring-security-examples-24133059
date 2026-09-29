@@ -15,7 +15,9 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -314,6 +316,54 @@ class ShopIntegrationTest {
     }
 
     // ===== Quản lý sản phẩm =====
+
+    @Test
+    @WithUserDetails("user01")
+    @SuppressWarnings("unchecked")
+    void dashboardShowsOnlyCurrentUsersRecentProducts() throws Exception {
+        var products = new ArrayList<Product>();
+        try {
+            for (String username : List.of("admin", "user01")) {
+                var product = new Product();
+                product.setName("Dashboard " + username + System.nanoTime());
+                product.setPrice(BigDecimal.ONE);
+                product.setUser(userRepository.findByUsernameIgnoreCase(username).orElseThrow());
+                products.add(productRepository.save(product));
+            }
+            var result = mvc.perform(get("/")).andExpect(status().isOk()).andReturn();
+            var recent = (List<ProductDTO>) result.getModelAndView().getModel().get("recentProducts");
+            assertThat(recent).extracting(ProductDTO::getId)
+                    .contains(products.get(1).getId()).doesNotContain(products.get(0).getId());
+            assertThat(recent).allMatch(product -> "user01".equals(product.getUsername()));
+        } finally {
+            products.forEach(product -> productRepository.deleteById(product.getId()));
+        }
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @SuppressWarnings("unchecked")
+    void adminDashboardShowsFiveNewestProductsAcrossOwners() throws Exception {
+        var products = new ArrayList<Product>();
+        try {
+            for (int index = 0; index < 6; index++) {
+                var product = new Product();
+                product.setName("Dashboard " + System.nanoTime());
+                product.setPrice(BigDecimal.ONE);
+                product.setUser(userRepository.findByUsernameIgnoreCase(index % 2 == 0 ? "admin" : "user01")
+                        .orElseThrow());
+                products.add(productRepository.save(product));
+            }
+            var result = mvc.perform(get("/")).andExpect(status().isOk()).andReturn();
+            var recent = (List<ProductDTO>) result.getModelAndView().getModel().get("recentProducts");
+            assertThat(recent).extracting(ProductDTO::getId).containsExactly(
+                    products.get(5).getId(), products.get(4).getId(), products.get(3).getId(),
+                    products.get(2).getId(), products.get(1).getId());
+            assertThat(recent).extracting(ProductDTO::getUsername).contains("admin", "user01");
+        } finally {
+            products.forEach(product -> productRepository.deleteById(product.getId()));
+        }
+    }
 
     @Test
     @WithUserDetails("user01")

@@ -12,60 +12,35 @@
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>
                                 </svg>
-                                IOTSTAR WORKSPACE
+                                IOTSTAR SHOP
                             </span>
                             <h1>
-                                Ý tưởng của bạn.
+                                Quản lý shop.
                                 <br>
                                 <span>
-                                    Không gian của bạn.
+                                    Nhẹ hơn mỗi ngày.
                                 </span>
                             </h1>
                             <p>
-                                Một cách hiện đại để quản lý sản phẩm, hình ảnh và tài khoản. Tập trung vào điều quan trọng, để mọi thứ còn lại thật đơn giản.
+                                Sản phẩm, hình ảnh và tài khoản. Tất cả được sắp xếp gọn gàng trong một không gian dễ sử dụng.
                             </p>
                             <div class="welcome-actions">
                                 <a class="button" th:href="@{/register}">
-                                    Tạo tài khoản miễn phí
+                                    Bắt đầu ngay
                                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                         <path d="M4 12h16m-6-6 6 6-6 6"/>
                                     </svg>
                                 </a>
                                 <a class="button secondary" th:href="@{/login}">
-                                    Đã có tài khoản
+                                    Đăng nhập
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    </svg>
                                 </a>
-                            </div>
-                            <div class="landing-note">
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m5 12 4 4L19 6"/>
-                                </svg>
-                                Xác thực email
-                                &nbsp;
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m5 12 4 4L19 6"/>
-                                </svg>
-                                Dễ bắt đầu
-                                &nbsp;
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m5 12 4 4L19 6"/>
-                                </svg>
-                                Mọi thiết bị
                             </div>
                         </div>
                         <div class="landing-art">
-                            <div class="auth-art" aria-hidden="true">
-                                <img class="workspace-visual" th:src="@{/images/workspace.svg}" alt="">
-                                <span class="art-caption">
-                                    YOUR SPACE. YOUR POSSIBILITIES.
-                                </span>
-                            </div>
-                            <span class="landing-float">
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
-                                    <path d="m8 12 3 3 5-6"/>
-                                </svg>
-                                Riêng tư. Rõ ràng. Dễ sử dụng.
-                            </span>
+                            <img class="workspace-visual" th:src="@{/images/workspace.svg}" alt="" aria-hidden="true">
                         </div>
                     </div>
                     <div class="feature-row">
@@ -74,10 +49,10 @@
                                 01
                             </span>
                             <h3>
-                                Bắt đầu an tâm
+                                Đăng ký dễ dàng
                             </h3>
                             <p>
-                                Tạo tài khoản và xác thực email bằng mã OTP.
+                                Xác thực email bằng OTP để bắt đầu.
                             </p>
                         </article>
                         <article>
@@ -85,10 +60,10 @@
                                 02
                             </span>
                             <h3>
-                                Quản lý thuận tiện
+                                Quản lý gọn gàng
                             </h3>
                             <p>
-                                Sản phẩm, hình ảnh và giá bán trong cùng một không gian.
+                                Tìm, cập nhật và sắp xếp danh mục sản phẩm.
                             </p>
                         </article>
                         <article>
@@ -96,10 +71,10 @@
                                 03
                             </span>
                             <h3>
-                                Luôn trong tầm tay
+                                Ở mọi màn hình
                             </h3>
                             <p>
-                                Tìm kiếm nhanh và thao tác dễ dàng trên mọi màn hình.
+                                Thao tác thuận tiện trên máy tính và điện thoại.
                             </p>
                         </article>
                     </div>
@@ -108,11 +83,13 @@
                     <div class="dashboard-heading">
                         <div>
                             <p class="eyebrow">
-                                TỔNG QUAN KHÔNG GIAN
+                                KHÔNG GIAN CỦA BẠN
                             </p>
-                            <h1 th:text="|Chào ${#authentication.principal.fullName}.|">Chào bạn.</h1>
-                            <p>
-                                Cùng tạo nên một ngày làm việc hiệu quả.
+                            <h1>
+                                Tổng quan
+                            </h1>
+                            <p th:text="|Chào ${#authentication.principal.fullName}, cùng bắt đầu một ngày hiệu quả.|">
+                                Chào bạn.
                             </p>
                         </div>
                         <a class="button" th:href="@{/products/create}">
@@ -122,38 +99,8 @@
                             Thêm sản phẩm
                         </a>
                     </div>
-                    <div class="dashboard-hero">
-                        <div class="hero-copy">
-                            <span class="hero-tag">
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>
-                                </svg>
-                                YOUR WORKSPACE, REIMAGINED
-                            </span>
-                            <h2>
-                                Mọi ý tưởng lớn
-                                <br>
-                                bắt đầu từ
-                                <em>
-                                    đây.
-                                </em>
-                            </h2>
-                            <p>
-                                Sắp xếp sản phẩm, làm mới hình ảnh và quản lý shop theo cách của bạn.
-                            </p>
-                            <a class="hero-link" th:href="@{/products}">
-                                Khám phá danh mục
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M4 12h16m-6-6 6 6-6 6"/>
-                                </svg>
-                            </a>
-                        </div>
-                        <div class="hero-art">
-                            <img th:src="@{/images/workspace.svg}" alt="" aria-hidden="true">
-                        </div>
-                    </div>
                     <div class="cards" th:classappend="${#authentication.principal.role != 'ROLE_ADMIN'} ? 'single'">
-                        <div class="card stat-card" sec:authorize="hasRole('ADMIN')">
+                        <a class="card stat-card" th:href="@{/users}" sec:authorize="hasRole('ADMIN')">
                             <div class="stat-top">
                                 <span class="stat-icon">
                                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -171,10 +118,8 @@
                             <p class="note">
                                 Tài khoản trong hệ thống
                             </p>
-                            <span class="stat-decoration" aria-hidden="true">
-                            </span>
-                        </div>
-                        <div class="card stat-card" sec:authorize="hasRole('ADMIN')">
+                        </a>
+                        <a class="card stat-card" th:href="@{/products}" sec:authorize="hasRole('ADMIN')">
                             <div class="stat-top">
                                 <span class="stat-icon">
                                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -183,19 +128,17 @@
                                     </svg>
                                 </span>
                                 <span>
-                                    Sản phẩm
+                                    Tổng sản phẩm
                                 </span>
                             </div>
                             <strong th:text="${productCount}">
                                 0
                             </strong>
                             <p class="note">
-                                Trong toàn bộ danh mục
+                                Sản phẩm trong danh mục
                             </p>
-                            <span class="stat-decoration" aria-hidden="true">
-                            </span>
-                        </div>
-                        <div class="card stat-card" >
+                        </a>
+                        <a class="card stat-card" th:href="@{/products}">
                             <div class="stat-top">
                                 <span class="stat-icon">
                                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -213,129 +156,175 @@
                             <p class="note">
                                 Do bạn trực tiếp quản lý
                             </p>
-                            <span class="stat-decoration" aria-hidden="true">
-                            </span>
-                        </div>
+                        </a>
                     </div>
-                    <div class="dashboard-bottom">
-                        <div class="catalog-panel panel">
+                    <div class="overview-grid">
+                        <div class="panel recent-panel">
                             <div class="section-heading">
                                 <h2>
-                                    Danh mục sản phẩm
+                                    Sản phẩm mới nhất
                                 </h2>
-                                <span class="panel-kicker">
-                                    KHÔNG GIAN SÁNG TẠO
-                                </span>
+                                <a th:href="@{/products}">
+                                    Xem tất cả →
+                                </a>
                             </div>
-                            <div class="catalog-content">
-                                <div class="catalog-illustration" aria-hidden="true">
-                                    <div class="catalog-orbit">
-                                    </div>
+                            <div class="recent-empty" th:if="${#lists.isEmpty(recentProducts)}">
+                                <div class="empty-art" aria-hidden="true">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/>
+                                        <path d="m3 8 9 5 9-5M12 13v8M7 5.8l9 5"/>
+                                    </svg>
                                     <span>
-                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/>
-                                            <path d="m3 8 9 5 9-5M12 13v8M7 5.8l9 5"/>
-                                        </svg>
-                                    </span>
-                                    <i>
                                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                             <path d="M12 5v14M5 12h14"/>
                                         </svg>
-                                    </i>
+                                    </span>
                                 </div>
-                                <div>
-                                    <h3 th:text="${ownProductCount == 0} ? 'Bắt đầu với sản phẩm đầu tiên' : 'Tiếp tục hoàn thiện danh mục'">
-                                    </h3>
-                                    <p>
-                                        Một cái tên, một mức giá, một bức ảnh.
-                                        <br>
-                                        Mọi thứ bạn cần để đưa sản phẩm vào shop.
-                                    </p>
-                                    <a class="button secondary" th:href="@{/products/create}">
-                                        Tạo sản phẩm
-                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M4 12h16m-6-6 6 6-6 6"/>
-                                        </svg>
-                                    </a>
-                                </div>
+                                <h3>
+                                    Danh mục đang chờ bạn
+                                </h3>
+                                <p>
+                                    Thêm sản phẩm đầu tiên. Một cái tên, mức giá và hình ảnh là đủ để bắt đầu.
+                                </p>
+                                <a class="button secondary" th:href="@{/products/create}">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M12 5v14M5 12h14"/>
+                                    </svg>
+                                    Tạo sản phẩm đầu tiên
+                                </a>
                             </div>
-                            <div class="workflow-strip">
-                                <span>
-                                    <b>
-                                        01
-                                    </b>
-                                    Thông tin
-                                </span>
-                                <span>
-                                    <b>
-                                        02
-                                    </b>
-                                    Hình ảnh
-                                </span>
-                                <span>
-                                    <b>
-                                        03
-                                    </b>
-                                    Lưu sản phẩm
-                                </span>
+                            <div class="table-wrap" th:unless="${#lists.isEmpty(recentProducts)}" role="region" aria-label="Sản phẩm mới nhất, cuộn ngang trên màn hình nhỏ" tabindex="0">
+                                <table>
+                                    <caption class="sr-only">
+                                        Năm sản phẩm mới nhất theo quyền truy cập
+                                    </caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">
+                                                Sản phẩm
+                                            </th>
+                                            <th scope="col">
+                                                Giá bán
+                                            </th>
+                                            <th scope="col">
+                                                Thao tác
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="p : ${recentProducts}">
+                                            <td>
+                                                <div class="product-cell">
+                                                    <img class="thumb" th:if="${p.imageUrl != null}" th:src="@{${p.imageUrl}}" th:alt="${p.name}" loading="lazy">
+                                                    <span class="thumb-placeholder" th:unless="${p.imageUrl != null}" aria-label="Chưa có ảnh">
+                                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                            <path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/>
+                                                            <path d="m3 8 9 5 9-5M12 13v8M7 5.8l9 5"/>
+                                                        </svg>
+                                                    </span>
+                                                    <div>
+                                                        <span class="row-title" th:text="${p.name}">
+                                                        </span>
+                                                        <span class="row-subtitle" th:text="|Mã sản phẩm #${p.id}|">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="price" th:text="|${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')} ₫|">
+                                            </td>
+                                            <td>
+                                                <a class="button secondary small" th:href="@{/products/edit/{id}(id=${p.id})}" th:aria-label="|Sửa ${p.name}|">
+                                                    Sửa
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="panel action-panel">
-                            <div class="section-heading">
-                                <h2>
-                                    Truy cập nhanh
-                                </h2>
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <rect x="3" y="3" width="7" height="7" rx="2"/>
-                                    <rect x="14" y="3" width="7" height="7" rx="2"/>
-                                    <rect x="3" y="14" width="7" height="7" rx="2"/>
-                                    <rect x="14" y="14" width="7" height="7" rx="2"/>
-                                </svg>
+                        <div class="overview-side">
+                            <div class="panel action-panel">
+                                <div class="section-heading">
+                                    <h2>
+                                        Thao tác nhanh
+                                    </h2>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <rect x="3" y="3" width="7" height="7" rx="2"/>
+                                        <rect x="14" y="3" width="7" height="7" rx="2"/>
+                                        <rect x="3" y="14" width="7" height="7" rx="2"/>
+                                        <rect x="14" y="14" width="7" height="7" rx="2"/>
+                                    </svg>
+                                </div>
+                                <a class="quick-action" th:href="@{/products/create}">
+                                    <span class="quick-icon ">
+                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M12 5v14M5 12h14"/>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <strong>
+                                            Thêm sản phẩm
+                                        </strong>
+                                        <small>
+                                            Tạo mới danh mục của bạn
+                                        </small>
+                                    </span>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    </svg>
+                                </a>
+                                <a class="quick-action" th:href="@{/products}">
+                                    <span class="quick-icon mint">
+                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M6 7h12l2 13H4L6 7Z"/>
+                                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <strong>
+                                            Quản lý sản phẩm
+                                        </strong>
+                                        <small>
+                                            Tìm kiếm và cập nhật
+                                        </small>
+                                    </span>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    </svg>
+                                </a>
+                                <a class="quick-action" th:href="@{/users}" sec:authorize="hasRole('ADMIN')">
+                                    <span class="quick-icon peach">
+                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <circle cx="9" cy="7" r="3"/>
+                                            <path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <strong>
+                                            Quản lý người dùng
+                                        </strong>
+                                        <small>
+                                            Tài khoản và quyền truy cập
+                                        </small>
+                                    </span>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    </svg>
+                                </a>
                             </div>
-                            <a class="quick-action" th:href="@{/products}">
-                                <span class="quick-icon">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M6 7h12l2 13H4L6 7Z"/>
-                                        <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
-                                    </svg>
-                                </span>
-                                <div>
-                                    <strong>
-                                        Quản lý sản phẩm
-                                    </strong>
-                                    <small>
-                                        Tìm kiếm và cập nhật danh mục
-                                    </small>
-                                </div>
+                            <div class="guide-panel">
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M4 12h16m-6-6 6 6-6 6"/>
+                                    <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/>
                                 </svg>
-                            </a>
-                            <a class="quick-action" sec:authorize="hasRole('ADMIN')" th:href="@{/users}">
-                                <span class="quick-icon peach">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <circle cx="9" cy="7" r="3"/>
-                                        <path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/>
-                                    </svg>
-                                </span>
-                                <div>
-                                    <strong>
-                                        Quản lý người dùng
-                                    </strong>
-                                    <small>
-                                        Tài khoản và quyền truy cập
-                                    </small>
-                                </div>
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M4 12h16m-6-6 6 6-6 6"/>
-                                </svg>
-                            </a>
-                            <div class="quick-note">
-                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/>
-                                    <path d="m8 12 3 3 5-6"/>
-                                </svg>
-                                Nội dung hiển thị theo quyền truy cập của tài khoản.
+                                <h3>
+                                    Một hình ảnh, nhiều khác biệt.
+                                </h3>
+                                <p>
+                                    Ảnh rõ nét giúp bạn nhận biết và tìm sản phẩm nhanh hơn.
+                                </p>
+                                <a th:href="@{/products/create}">
+                                    Tạo sản phẩm với hình ảnh →
+                                </a>
                             </div>
                         </div>
                     </div>

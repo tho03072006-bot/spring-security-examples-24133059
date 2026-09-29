@@ -1,5 +1,6 @@
 package vn.iotstar.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,8 @@ public class HomeController {
         model.addAttribute("productCount", productService.countProducts());
         model.addAttribute("ownProductCount",
                 currentUser == null ? 0 : productService.countByUser(currentUser.getId()));
+        model.addAttribute("recentProducts", currentUser == null
+                ? List.of() : productService.findAll("", 0, 5).getContent());
         return "home";
     }
 
