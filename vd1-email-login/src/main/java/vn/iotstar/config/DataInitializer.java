@@ -34,7 +34,7 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
         addUser("admin", "admin@iotstar.vn", "Quản trị viên", adminRole, true);
-        addUser("user01", "user01@gmail.com", "Nguyễn Hữu Trung", userRole, true);
+        addUser("user01", "user01@gmail.com", "Trần Minh Thọ", userRole, true);
         addUser("pending", "pending@iotstar.vn", "Tài khoản chưa kích hoạt", userRole, false);
     }
 

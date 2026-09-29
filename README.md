@@ -1,5 +1,9 @@
 # Bài tập Spring Security — Ví dụ 1, 2, 3
 
+- Sinh viên: **Trần Minh Thọ**
+- MSSV: **24133059**
+- Môn: Lập trình Web — bài tập ngày 28/09/2026 (ví dụ 1, 2, 3 trong tài liệu "Hướng dẫn chức năng login bằng Spring Security 7")
+
 Spring Boot 4.1.1, Spring Security 7, MapStruct và Thymeleaf. Mỗi module là một ứng dụng độc lập.
 
 | Module | Chức năng | Cổng |
@@ -25,12 +29,33 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/run.ps1 -Example 3
 
 Để chạy thử với H2, mail và ảnh lưu tại máy, dùng `-Profile demo`. Thư OTP demo nằm trong `<module>/data/mailbox/`.
 
+Trên Linux/macOS, build bằng `./mvnw clean verify`, sau đó chạy ví dụ 3:
+
+```sh
+cd vd3-shop-otp
+java -jar target/vd3-shop-otp-1.0.0.jar --spring.profiles.active=demo
+```
+
+## Đối chiếu backend với đề bài
+
+| Yêu cầu | Mã nguồn / kiểm thử |
+|---|---|
+| VD1: email, thông tin header, fragments không Layout Dialect | [Module VD1](vd1-email-login/src), [LoginIntegrationTest](vd1-email-login/src/test/java/vn/iotstar/LoginIntegrationTest.java) |
+| VD2: username hoặc email, fullname/images, Layout Dialect | [Module VD2](vd2-custom-login/src), [LoginIntegrationTest](vd2-custom-login/src/test/java/vn/iotstar/LoginIntegrationTest.java) |
+| VD3: đăng ký, xác nhận/gửi lại OTP, khôi phục mật khẩu | [AuthServiceImpl và OtpServiceImpl](vd3-shop-otp/src/main/java/vn/iotstar/service/impl), [ShopIntegrationTest](vd3-shop-otp/src/test/java/vn/iotstar/ShopIntegrationTest.java) |
+| CRUD, tìm kiếm, phân trang, đếm user/product, quan hệ 1–n | [Service](vd3-shop-otp/src/main/java/vn/iotstar/service/impl), [Entity](vd3-shop-otp/src/main/java/vn/iotstar/entity), [MapStruct](vd3-shop-otp/src/main/java/vn/iotstar/mapper) |
+| Session, BCrypt, phân quyền, quyền sở hữu, OTP đồng thời, rollback ảnh | [BackendIntegrityIntegrationTest](vd3-shop-otp/src/test/java/vn/iotstar/BackendIntegrityIntegrationTest.java) |
+| Xử lý lỗi SMTP và upload Cloudinary | [ExternalServiceFailureIntegrationTest](vd3-shop-otp/src/test/java/vn/iotstar/ExternalServiceFailureIntegrationTest.java) |
+
+`clean verify` chạy kiểm thử cả ba module. Profile `test` dùng H2 cùng mail/ảnh local; riêng kiểm thử lỗi dịch vụ ngoài sử dụng mock. Profile `sqlserver` dùng SQL Server, SMTP và Cloudinary thật. Khi khóa/xóa/đổi thông tin đăng nhập hoặc đặt lại mật khẩu, phiên cũ bị thu hồi sau khi lưu thành công.
+
 ## Tài khoản mẫu
 
-| Username | Email | Vai trò |
-|---|---|---|
-| `admin` | `admin@iotstar.vn` | ADMIN |
-| `user01` | `user01@gmail.com` | USER |
+| Username | Email | Họ tên | Vai trò |
+|---|---|---|---|
+| `admin` | `admin@iotstar.vn` | Quản trị viên | ADMIN |
+| `user01` | `user01@gmail.com` | Trần Minh Thọ | USER |
+| `pending` | `pending@iotstar.vn` | Tài khoản chưa kích hoạt | USER, bị chặn đăng nhập |
 
 Mật khẩu mẫu: `123456`. Ví dụ 1 nhập email, ví dụ 2 nhập username hoặc email, ví dụ 3 nhập username.
 
